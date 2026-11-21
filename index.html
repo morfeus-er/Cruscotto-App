@@ -177,6 +177,26 @@ button.ref-row:hover{background:var(--alt)}
 .modes button[aria-checked="true"]{background:var(--orange);border-color:var(--orange);color:#fff}
 .pf-fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-top:10px;background:var(--alt);border-radius:10px;padding:10px}
 .pf-fields label{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--muted);font-weight:600}
+#lock{position:fixed;inset:0;z-index:50;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 24px calc(24px + env(safe-area-inset-bottom,0px));overflow-y:auto}
+#lock[hidden]{display:none}
+#lock .box{width:100%;max-width:380px;display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center;margin:auto 0}
+#lock .lk-logo{width:84px;height:84px;border-radius:20px;background:#0B1828;border:1px solid rgba(243,109,19,.45);display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow)}
+#lock .lk-logo img{width:62px}
+#lock h1{font-size:22px;margin:4px 0 0}
+#lock .fp{width:100%;min-height:56px;font-size:16px;gap:10px}
+#lock .lk-area{display:flex;flex-direction:column;gap:10px;width:100%;align-items:stretch}
+#lock .lk-area[hidden]{display:none}
+#lock .pin-in{font-size:22px;letter-spacing:.4em;text-align:center;min-height:52px;width:100%}
+#lock .lk-link{background:none;border:0;color:var(--muted);text-decoration:underline;font-size:14px;cursor:pointer;padding:6px;display:inline-flex;gap:6px;align-items:center}
+#lock .lk-row{display:flex;justify-content:space-between;width:100%;flex-wrap:wrap;gap:4px}
+#lock .lk-setup label{display:flex;flex-direction:column;gap:4px;text-align:left;font-size:13px;color:var(--muted);font-weight:600}
+#lock .lk-setup label.chk{flex-direction:row;align-items:center;font-size:14px;color:var(--text);font-weight:500}
+#lock .lk-firma{font-size:11px;color:var(--muted);margin-top:18px;text-align:center}
+.chk{display:flex;gap:10px;align-items:center;font-size:14px;font-weight:500;color:var(--text);text-align:left}
+.chk input{min-height:0;width:20px;height:20px;accent-color:var(--orange);flex:none}
+.sec-on{display:flex;gap:10px;align-items:center;background:var(--buy-bg);color:var(--buy);border-radius:10px;padding:10px 12px;font-weight:600;font-size:14px}
+.sec-warn{background:var(--orange-soft);border:1px solid var(--orange-border);border-radius:10px;padding:10px 12px;font-size:14px}
+body.locked{overflow:hidden}
 .switch{width:58px;height:32px;border-radius:999px;border:0;background:var(--border);position:relative;cursor:pointer;flex:none}
 .switch span{position:absolute;top:4px;left:4px;width:24px;height:24px;border-radius:50%;background:#fff;transition:left .15s}
 .switch[aria-checked="true"]{background:var(--orange)}
@@ -212,6 +232,32 @@ button.ref-row:hover{background:var(--alt)}
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 </head>
 <body>
+<div id="lock" hidden>
+  <div class="box">
+    <div class="lk-logo"><img alt="Logo ER" id="lk-img"></div>
+    <h1>Cruscotto Borsa</h1>
+    <p class="k" id="lk-sub" style="margin:0">Sblocca per vedere i tuoi dati</p>
+    <div class="lk-area" id="lk-fp-area" hidden>
+      <button type="button" class="btn accent fp" id="lk-fp-go"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="M12 11c0 3.5-1 6.5-3 9"/><path d="M8.5 6.3A6 6 0 0 1 18 11c0 1.4-.1 2.8-.4 4.1"/><path d="M6.2 8.6A6 6 0 0 0 6 11c0 2.2-.6 4.2-1.6 5.8"/><path d="M15 11a3 3 0 0 0-6 0c0 3-.7 5.8-2 8"/><path d="M12 11c0 2.5.5 5 1.5 7"/><path d="M16.5 19.5c.4-1.1.7-2.3.9-3.5"/></svg>Sblocca con l’impronta</button>
+      <button type="button" class="lk-link" id="lk-to-pin" style="align-self:center">Usa il PIN</button>
+    </div>
+    <div class="lk-area" id="lk-pin-area" hidden>
+      <input type="password" inputmode="numeric" autocomplete="off" placeholder="PIN" aria-label="PIN" id="lk-pin" class="pin-in">
+      <button type="button" class="btn accent fp" id="lk-pin-go" style="min-height:50px">Sblocca</button>
+      <div class="lk-row"><button type="button" class="lk-link" id="lk-to-fp"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="M12 11c0 3.5-1 6.5-3 9"/><path d="M8.5 6.3A6 6 0 0 1 18 11c0 1.4-.1 2.8-.4 4.1"/><path d="M6.2 8.6A6 6 0 0 0 6 11c0 2.2-.6 4.2-1.6 5.8"/><path d="M15 11a3 3 0 0 0-6 0c0 3-.7 5.8-2 8"/><path d="M12 11c0 2.5.5 5 1.5 7"/><path d="M16.5 19.5c.4-1.1.7-2.3.9-3.5"/></svg>Usa l’impronta</button><button type="button" class="lk-link" id="lk-forgot">Ho dimenticato il PIN</button></div>
+    </div>
+    <div class="lk-area lk-setup" id="lk-setup-area" hidden>
+      <label>Scegli un PIN (almeno 6 cifre)<input type="password" inputmode="numeric" autocomplete="off" id="lk-new1" placeholder="••••••"></label>
+      <label>Ripeti il PIN<input type="password" inputmode="numeric" autocomplete="off" id="lk-new2" placeholder="••••••"></label>
+      <label>Blocca di nuovo<select id="lk-after"><option value="0">A ogni apertura</option><option value="5" selected>Dopo 5 minuti in sottofondo</option><option value="60">Dopo 1 ora</option><option value="480">Dopo 8 ore</option></select></label>
+      <label class="chk" id="lk-bio-row"><input type="checkbox" id="lk-bio" checked> Usa anche l’impronta (o il volto) di questo dispositivo</label>
+      <button type="button" class="btn accent fp" id="lk-setup-go" style="min-height:50px">Attiva protezione</button>
+      <button type="button" class="lk-link" id="lk-setup-cancel" style="align-self:center">Annulla</button>
+    </div>
+    <div class="err" id="lk-err"></div>
+  </div>
+  <div class="lk-firma" id="lk-firma"></div>
+</div>
 <div class="container">
   <header>
     <div class="logo"><img alt="Logo ER" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIwAAAA8CAYAAAC0ClJLAAAp0ElEQVR42uV9eZhdZ3nf7/d+3713ZrTvki1bljfZY2PssKUQkJwAtiF2A/UIaEkhaQKlbehCUroyGmiSLlma0tIWSv20pAloGsISggmktkhCHhYDBixL3mVhS5Yt21pn7j3ne3/94yz33Dsz0hjsAk/P89xn5p57lm95v3f7ve/7EQDOPffizX9zS3bj5lGMMncH3XtgfrKrnMa0NFgw5kYGJcECAAGCAwQkA9E4HKABAgASkvq/E6BLBAAjhQUOlzj8e3WfZBScIUAGyBOYBDnBSCgYIMGSQ7OZJ4agaIwhAMe7QA8WjruN3vlU/PPb77nnLwSQZXvPfEzaX73qf732nJhfuK6l3tIRYCwotOie5/SUQupRWe6uVpS1gQDJaEY5RSaRdMpYDB0gAynRnHIWbRAgAQQSIqgcogGQUxbKcW08wwS6iZGUUD0jUW5mAYI7RLNMMnnQkZ71/uxovOfP7v3VvwB2JgDQJGzXFDAF+JlGgNs2bLngly6f/dTEFj1vpJrlghaQpeKiaAKqOSeK7nwfR5O61PyH81+rBX4nAQPhALy8iACMxZ0uIi9+QDQAMPRcyMuX7n64/ei79q+9moe/+bgar5pDJoBNAX7JJddc/vc2P/6dv7qpa+0AtK14rhFIKj5ezbYJVvaA0CLHhf1+qmwOm/3X4saV8zy3fIQEnE7E/qeD33ksfP07J9rTX3i085mDj919FwDsnkDYOQ1faCzi9vP5szedh+etH+ll3ZxmDbpgrF6i8m4OdqCctP7sq24cIGhuyweJrZzYAfojigEWBl8gYEEmwP7SJAcp0ViSkQAxwQA4hHZw/cQ6nvOKx2av/uJhfH5iAjY9jTTf4/dOgJgGlqdTq69ckWzLsm6eJWNBCv2B4CCXxYI02CB+NcdRg4uI5WiKKmilHPvi3/5DWI11NWxDrx1eoMtbwrmbGLZv5Asf6+YvfMN5s7/67WPnffqWe0feu3P63m8aAdf8jY8bOj46GuS9BHPBBibZ+9QuCCIgsU/9AwSjAUqej11Q/WcNCgE2aa7k1dVAEmgSEAA1iajZLXFwmUnFS9V8jeACIs1HI7A8dEcWyxnXtvOVK1uCy5g5zch+A5xln1Q3pSYa1Wuj0eb+JA/QFvszQA3xPe93E7DGwziXIMvfOEShApEkSJKZfFN7xs/dwNZPboyvO3/Er/vIsosm/2j/m3+LmHKhXF+Nw2ZydLsOs5q8NcQQBIcXDEMSJUGu4oDcSwak4m/ZFsFRf+rz9bUsfquulQteXeXlOQmo3lI9g5LY/47ybV5eyCTVbfOCL0pgPQnF4BooA8OJrvxwhsMAMD69sNyYKP8uH7EVY7Fc8hX/VIMzqOiwlx0rB6/qYdGysqlq9L4am4ItsxxNSGD1yPIWFDpK/RDUT0LV7fqJ1VVejSRcDsjrMZFkM2I8lcPds/xnzpsZe9/zT/27f7f9w7fqnMvWGOCTKCVrxWFaxhBL1anPhQrWIlItg0MwmZOyUmA4iIBhBjpIyQDncBnNUUYG2Do4zDIqprzAbLLBTarVWY07BMndqVwKHOh38bRApJShezbOcteR4kUd09KWlTOG6i9rZtYyJCtoyURaMVacXyfDoCgfFmmYb4Tm3MyB/9VnUgLEkqUXpFc0RXB5LjEXDbDitJG5LEDuV6+cTeOr2q9yzHzy3Y++9Ib38Usn0BBP0awhT8la5SWISNgT3ZYd7RFduUx0Ek7Ii2Y15HeldIqCVW3XgDJHuNQYtmrV+/y62pAmxGJmKKq0v0RQLhhpFmjuYJ7gs+5uhtbaDsLaDjFiGXLVwq4kMFc7Mq5s29KmnnKmw1whsBh8kXBYJWfRMuJ4FuNTGTHrQCa6Qd4QOrKKf6uhq9UqsVTptYM6R1+PmUMurDVZkmQwEGAojCp5Kb6M5RQFACvaCKvbCSNIcCnvOuiikQRoPJl7HLNe9uYtfNnjL3rk93/jqy943e6JO7xShOOxrrLZBDCKNfsWFUj+4SOjJz5/KH4gk/+fXs8ej0a3mHLl5m50Y09AZ2BQQ0blpIxUbhTQRQcdAF1k3bLDldYwC2BkBIFU0swcegmlWZ0kttRhctUmOaObS0QPaI96aIUYshTs1GxKT6aURlyjG5bHC0YiXvP6c2ffsn3dbJhJlQVVWIGRYqfF1qKtO2PyaphqUx9oB+DPHh/B/z7Y+WiW+KlMeDjlfjL3lFd9KMarGJeqD0B/9DyYz+F1HaDbBTrF8CFnbw5zqu5nbJn5rI2NxuB5DMmyYuwYoicPQWzn4IrlI3b1lrH8pzZ2/PlXrUprL1ragyflmRRIIJA4LcRzRnrZ377UXntKR//pzmm8t7SeUsyScnc1KB4YNaWDs63Wx78bf3v3tw9M4kf3+DqAj583ev7YjvX2JmPKBQZCIMHkSD1PMwAwPn522zcrCYSljBCFVlDKUoy3Ho63/+c7HnzTj8CYfBbAr2PJVevfeNGx19+wMf7znzkv3zwaZvOuIxgCDMJM5uGipTPp1ev5T/5405W73zD9nX2TgMUlLVM7WF+zEAADn86IWdk9uycQ/uwE4uqXIKtfOfVDOAyTQ22bBF7yZbRueAmy//rn+EYuvMkgJbHWrpKYn8riicX2KcsLDlOYioU8iJSeTsSJFO6UwP9wA9p/vgz5+Dj0AxmnBZb33r3gRKmP7bodyfitIx/9Fv7LR+99/qf/7UuevuXntuJVy2Mv7yUFowAasyR/xYZ89Obzjv3abx7C63dNAtHMG66OUvESQSOM7junkXZPADunzuwB/IEfU3O/37YdiVPQf9rBBLFh2tYd9m6K+dkfvh3AHvS9VA3T1wGXIQknSGByO9L0rfP7c34g49A4KhVtqlQKJ7cjvG/PnY/849uvv5H+nU+9Y5teHa2bkmggkDnCylYv3byl9brvnNp2Haf2fy4Oatx9iyUQiAwLm5oTCLvP1PAzsfi9CxgEi71/oeeMQ/W5cQiHQNsDOfLWXJ8nIZLJ3RY7FyqUy4bDrG+2SHBNgu/8MsLERLPtE42pOpPR/r0e0/M8a3rey8YBNVz/mtqDfGIC4Q/+963dya+d/9bzxuLXbz4/bfDkDriBhCf4Zcsy27Ykf+PngAbBaGH3/bzNnEYifugPB7avzfXAq9t0dNV0TDskhCWWtRf7MCN92BxOBMeCI0JXsuDC3YUn9GwTjmeReBYi+tIXWs749DTS5HbEqT0PH/rowQvfO74yfeCKZbM6nQrzKtFsCRPPHclfDGwfiUY6NWzEVSsnLeD8mLAbr/jKL71whV6+pu1JktqhMN0cosmMEs2MBigQABUK/5lSnlQCbYUbjoRMpPpYJQEEq6RIddL6VqQDDFTec2UxgC0xJtJmcmazSRlonbEWNi0J953/olXZuZlcDoamT9kMoR3jSC37p85Ofj7k2MydYUnI9ZPrezc+fMWlv/HgTPjTBHZjjDC3ILmFALrcTLn15SEARMjclAcDgDwAxQoOMORkSkqIyEMo0Y/+fAQACQmR9JgnKBijLDiScoUsl/KIHBEUFLJjOWfvn8Fj5F33D7uEpvYgCSDvWvV7r9rUfc8Vy7mxcJ0Yk8BOcJw3lm1dee7RS+PZvUqDYmh6GunVl3/jLb9wYf7br9rQQ2RBsqFatQ2GjRoDaQAhw+84I5g5j+NvCCsSh93fLCwZeGH1EciTvCcU4kTlU2QI5jYW806lFJ6VXVEmNTEylkTjuHFTt3XlCn/XgdN8lxTQDkSLGMA5ao/LnJ5xULw1h4xD2NOQa7QYOyHQEK3w5nSTkDlg5bnchRMZ0E028/VjW2//1/vG3s6n7jrYAB6ESRin7jj20OkLbj/t4Y1tJs+hUCxn+NalPnrV0uzKSG9CXhzoiYZYcCWNx1fmP71jXeaj1uvNOiO9T/sse1gGIkBif02JcyGPeclCAxrHoBtryLlb9bgGdzVwQSrcmWQTnCuDACgiSM9QsrL039aGUhl84Nq2fDZdvqJy70p9r/ow5qNhFFJzFoYILKpljQtVQvM0VuYuKuBZJMiRn8zaN8zk/pHf+erF10n39cr1pl23wwTo0Znw1Se74Y2bR3NlpVgCoA0jwPlLs80RdFcljIQmxDuXw5SKaMc4ZpR1EyNkQQPRLhWw1p/6UoyUb9FgpATY4DAcJIo5vKYxSdW8V011DCjtYO0brsWsUHGewjvZS8CsbBFW0p5yQlIIBIyVp54luFm8s5tbUE3YRg3BJYMEw4bazEbfm1CJFsH+OcSlho2Y2Idk3LWmPZtu2BS3f37rkueT+MoEEKaBtHf9hIBpPZ7Fx57sEueP9BmZCxgJwpLAZZHsA2kDXSMW0mGQ5D2VXmFn2UkBRvUxgTJsSmzic0McrCKrUgsr2DDnoFMV0tVcfIWVU3Jt9UlxMLxiPn3eCrya5Omc/nSJJZ0JfGzOgstVqPsFoRfgPQeQsOo3DsRbzMNTa6bOum1zycJLJqIz8GQuYKawgcUJIgkRo8E1xnxNU2wcOTJNAGhL1g4akggFfXiSRcD6k1T5KKR5iXm6lPMOdFnw+VJfKO5NAlombwWEQYyTQ+JIZ7HFOM/C4jxRQoPiZ1DP4cID6gZE4HA34r6T8cnFCqOeYgG6RE+W9cmkFneVdNE87xzqch8fGgRba9qoiV79+CDOFc48IzeqdScRDgYIFtp3HwvpwWN8oLlQdhR8lJtGsrVrOkASRPb7khe6YTcOhDSo/yISMIX5Z1Q2hIQVbDTScSKP4VtPxeOZ63GQyL0IcGsFBjmYJ7kTooNGpMK50X9zhdaRhghJhKxas326VuEiUOrlzBKoAJgZQwBChErVjJ7cRRraobC6kpv3XL0Tbie+8mTrk8ce2/9wyQcWdExO7YETwN7jrdv++HD7ib815mvbJhhLLYV9RuLl5Hpz5lXFryygwXEw8KwmA6EYqDI2pn8VB7hyHSXZ0JysRrgNLtSRh198rIUvHrF/dPTo/v1VJCEA7NoBn9oDnT/mL13VcuSpMr8L4XoiA47mOBLnumFYr1hhfoVQQKhw5MIWFgLcHSHc8uCSv/jlr4/9HE6MPVJcfSwBFwN4uhyxTmMpjApYJmDVAuLgDgBLG7+tb/w/LuC9PpdbOYFd5ZddAqy84D3WP0c9E58TAHeAPHDX3e/3y3c8kYe/uTZmKwjFNhFJWgykQUglhp+SD1CgA7AG0agOp+mHQw0yZErulFiAXyV8VfK0yv6EWC8jdeVIidYKZkYxyUiy5/KZXDieM5z40uPhi3981/23DS0SwxS0atP4+ZcsPXZ9G0mnZBbq6CnZAycs3XWic1ccXFgaBtbnnciK8tgIsuoE4M6nW/jM4fhvceLueyXQagPpvoWF0EKzJSzSSpizYhvCvulYmfLmufQe2PRecOf04tz4FeO7/+Ddd/2rg3j3jzAgi8lJGBtQz399AQLvQDax4dSbX7jalyYpJy2AQoA8h4V9J+OBex9cdmdkTbVN009n1AClfvRm43I7nkOnvf3YJGA7dsDKuOh5p3XhE4v8bf6rFk1i/N6wMU0Chu2wXeuhHyUiub0MAvvAemhqqr9IJrcjvn0Pss3rL3zeTRtm37VlNPOuYMbCJTISXPefbuNrT8bdwFeORwwhI4NDPv/iy4HklXdJrExBjkSk0VikKkzuAPbs+X8+qM/5+6YAxx74FH7kD7ttO+zaPcjHN2998Tu3ZX/wus3Z6sxToV1SgFwuhj9/PM5+4ZH2LYVv+kwLc4H8CBe8Rn9RK2PKkmwmz6EJhHd+GXFye0Vx28/i49j+ffR7Tx+LXA9NnyFF4tka6MntgyrHjuZKnufcwmOw5/tsyvY5z7h9gSur9uxYD2E3nIRfuwd+7WUXvv7nLuh9eGJzdyWQUgIswuEi2lQ6ltqtrz3d+swTT+y7R5Ow6KV5xwaShDKm70yJZkPmKh3wdW2EtVE/xml8eZA97Vn0pH+/B59baiEAn9ozKM6m5udEz1kfv5dnTg31YunGSy7/a5u6b7958+zfv25jD7mn5IBZZbI7FFpmnz8c89sP2b8mgJ17wTiPrlu6zSuIa17UNqF21xXu456TW5ZmeseFM78+vnLL8yPDAx0yzch6s5nyETOMRljPoUx0FjGuREpIZpYKanUD4GbGlEgEkWVwKhoqfYGZBLpiQgow2tM9dL99onXvHfeOfR64I3sOaIcAdO65F2++8RzcuDT6CpPYNrMAyMQih60ESs1URdUjwYhUuLu8hh2LJDhXMsChImlFVS/dAYYgwMEGRlNmn9ILf54IKAA0ugcyyZEReZ6Tco8WTUbzVvK0BLCxyLSmTY2v65y+5uUb8s4FY5l6SQKLjNZSgmAsIv/G8dH2Jx+J/+Y7Bx/4mgpFOUVrYDYDyVRn8PTClc9BQ0C6hBvOmV1x7cbw9uTFgPScyBxoEYil00Aa9MVpvqQrznFVzEmDFIBUOg9nE/Clp0bxkbHehz91J35hEuDUs0cwFIBzNo2f/7atJ/e87cLeBSNWOCoMRYYjS+eQai9v0VwbkO6co2o5BnMkarShRqy85v6iYGrMEzWEx1aZA6zycFA5WI1Vuk3R3kCHoHzWGUgUqbgEUiKWRmUPzXTa798fPvF737zgX+yeOBAqIyH6MItZhJ1R5PwMgsfVzb0Eb1nunVBEwbcDgQj2syfnWswCYZAcLH3OHKCh5rtK9AA2kAYnrG4nvW4kxXuPL73xU3jx8vfiK8efLS4zuR2Be5C/enXvtTedk12wcXSm28sZAtnMCZ1X61YDh1atFBaeFAAIczJI+1fN58xuGiaqwLKBtJ15/BFqOhAFgew5TGSoHHwJBN21tM10wlvt3z3Q+tNbvjHzs9Ke1IyfiXAfwHZYgZxnGOYQbKywx1mjwH2VRkyOkM5KeYPorQ+BcjqLLZRqoK7gkF1B7ShbEfMMmAnPhQKzpoP28pYriZaJweeDABpu/IF0aA7KfQ0kGrFJBQMT3Tcp1CcFH3YkaEEsaZBNV0BBHSVYPJ3uHcoZYusvj7btjx6Jv/drf7nybYZvnSIHsx8jYKhybKTKy1t5WcK8aLWE5ZTcASVX7cjDAPI8DKDwLN45mw/2PyM6q5J/l6m3hVeXJqD9nMQfm6dTKIotsB/e0ECXhSJXaZhoSkLgnL4NEQr7tKXq2VTNgwEhNeKM5tCK5uF1DQ4kNfROQG2TkwxiCEezVvjswdYTv/9g3PW5ex78T8TDZXGOQQU/mhUCoJCV1szzhw/FilTg4yO9eORoFuyCJa5YxEwoCQOxf4PYiBagfC1CarCB4w6eK2x7FjAqoVlFHu4iA3D6ubCWzMpMwWqFVolscghUJ3iC0ShZ7f0vUbLQjDgo8fK+tCCaSiTVLJjijboEjbS+es2xxnsAycnqxXWoRGMmSJBGMCHg0dOtcMdTAd+dtbvuOdX6w/fvG/lvePruA6WCO9/EFX4YzVn1mneB7yyRzTueHPnVDz2YLt2xltesbHuIBhaRWIQGIHHO4YyD8VrDrJyD8UQlEWqO598avwvBwMxh33gqPvH1Jzv/Crgj+5eTsKlnOdOBMutj01WbC/7SNtnTqWOHThEnMqJNMIaKAAYreDSluM3Lf0s3R2kGeZl4Dc7l4s0YmGiqIwgqceMSvOSCDqInaCazkw+eCvd8+cnW5257ov3p+w887w5gugcUUZWcWhguWSBEc0H9wwHgoYe+vf/XHtJfuWXL87Zd3u4ub0V02kytRCrlEEmllCuE4kGBdFZZjISYU4kQkNfNICghIxAhZQRapVIoJlLG3IfJWMmSYmQ7ot1N1BeO2P14Yt8hAJh6DtJihsHYktMokLz18MipTxwa+9DDJ/l/nuzmR8Y6ISwJwcoSAWZBVnAUMSgyMZfcUjE2BYIS82JEWq1a9DNTICWTxHq2ciAxKSgQEVAOhiCOmAULoGeeO+k5gG5KSgqZJ7ospVnF3j0nlj799OFvHqjI1rgPH70ZYec0NH0WbC2eyad+BscdCerQARSz88MErDUg+2fvKDyqecndraGotk3+RK8VP/Hd+N8//M37/+GPDC5A4F++AnHvHmha8MWCsLG5ajWkrOYLx7tKACcBYnJxAdTPxTE+DjXfPT0Nf/aJpe9RNdLr0JYysMIMmnGCpoN1luityPZO4IcyC6cKmJpSkZf0TO+PmkMUHNItFubQU/gBpYP+AA/VLoDaLEI7ECMxtHYWOT6cAvxZTTf6ITrisOlc2UtnK2M3MYEwfgQcBtl2/IBg//ny/5q/zZcTOF1wpWeU1moNG2Ug9tgX7vckYFdMFLnN0w33BJ4pZy7vm27cd9cRcGoP0tmMwokJhIny3dX9i713gGBYh1RjKE1jblAhmuZZOdD/PzEYq7OgmuGSRXJbVsVAzqPvPdccp7RV5pQXG1g000jTC9z7nmeg98XSkzG4euraO2kBhRd6+baLrnvBCn/BqlihSArOsNSFMYOiK5gbqDqj0QdK/gkqocYiDQssADYvIdOKxxklLwJYyzqYXqeKFC5G5j0py9whWYgB7WgYiaAI5t3kTih1Ig2u/FimlBBiDo3ceyJ88rZ993787GVX+2EEVUoLG2ZjINAuSjPNXViArty69apXbow/N6Js7UmHjZq125Ghm5RJSgXOYZRkkCmUnj9SbiByl0hZp8VWcmAm8zwS7gx88DS+/YkHV38QJ756dAGnFgHgJ8cvfMuWUV3fBlounOwYjj3SDQ/84f3xY1On9x1aLIwSNZz7UTR9Xiupynx8xbYLbvr5rd1P3rQxQ8sA0MssHNYeTdaFvfrApob7oaa/czAnx5ve7GGUpPR99HOSWPJVItDRKKqFVPoyrFwHs4llXijw0QPtm+9++vI7ePjuAzjLCq3M3BpR9P7aLku9+nwTtWT9lRvefP7Tn33HRTPnBCTkIgKFyMI/UnvJh6arn8onpLL3kYCjLCVLQTI8PBPfdNmSx97ysQOX3fTAo/vu3dXgFpXFuGXLxde8eGXvlr9xXherO0Io3/l4N+IFK/lL//PhS1+7/8A9+3ctgtPEhTBHCkhD+s3u8UJ+XbLU3/qajT2savdm84TQR5PLaHapX+lyXpSWQ85BDrFXlpOueYZvkPjqysYNBFt1to8U2ah/C2E0FhPQCsBLVnPskhW9cw8fxoHJSWDqLPJVNghyDWbtzNEZjNNI1685/YLXbMzPWd6a6XVzsw5VKwFhOMSRjWTZBigZGwp3BFDV2QOAK5d10z+9vLNt1Pz9fBTXaRKs+rG3gp48hK1LHJev6GWeEsEAwrGho3ThstELgdkP8MDkKzU5ddYxsIVwh2JF5YMjsau4cFk7rIp0ZUkxF2PujBksZrLiOywmofw0/2f5af7Pxu/FeRei19f0r83La/LG9bkQMzH2ZLEni3nxvpCEkIsxF2PmxTUZLHZlMUsWXGwVHkItuqBQI+kXDXCglE1z04oBYH07W7q05fJEczHksJBkIYn137xsbxKDVx8Un+I6hlwWXCEkWcgVQq4YcoRwKrf28tjNr9+kV197ySWvsSn4xESx0qeBpEnYwYNXfeO+k+FPjueh5TD0nKEnC6d6bI9xNn/l+uzaV17ykeub957JfyMtKLyG7t1VajbCTFEgtCjq6QXuVH68cGVX7mk5vEy3LH7v/1Xj8Lq0aqNsaqO86+CBeb6hrvnaLzjar0JYVTOtVm0pBkkPYfHKJWvGWRd0tEqM+wDBVJU3V3a4bCyAjaThBk8aqC7b6He/VG2jwG35rZExWvZl1okrVnbx8vWz7xOu7+we77P1XVMAMZ3+4P6RX97zWGumE2iECwLMiF4CrliZ4SfWZ+8WJm33WeryWD9PUHPYoYZ47a7biwV1eMbufCJrWWyBI1EcC8JYcBUfaSxKo8HLjzASE0aiYySUnyiMBMdoEEeD2AliJzrb0dkOznZI7AQvzgexExJHg7N/vXM0ip3oNhLdRoNzJCR0QkInuI1E2EiUjZmrbZ7KaRmYMqKokNFmWgKUVTTPdvg8uFupy3ABr3gMcWmwMhWNVcBUVZYY6pir309ZJ8I6QdYOYDuAI0EcCbKRWJwbDe6Bnlxe9yTJwqjlacd6/7GXbXvwr5WcwkrG6R+bQHjgyP5vf/5w+3890WtbtLInNOSyMGZ5um5jesV1l//uzZyC7z4Dl4lWBET0PQvsZ+wN31XGsvKLT4UPfvCBkVdeuz5evcyS2iZrxyJG0ct++FAOdZ3AwmaZigpYlEqrZ0E7vmIN/TrbRbmWLAGtABuNhfYzm5jPZMhIxdUdtNaPwFbHDPlAJfviKb0EPyFlldd4kZ67ofAE1Xj6fMeTXWUnM2B1YFWOt0hqI0CY7T/Zwsm8tAqJZKCLNJfKWtsBSZ5L7p3IOBYRNow4lsSU8uRW6eG5DM9f1dXLVoV3/wWu/4Pd47dmlSp913QRNnrOOeF929fFn9l5frY6K2LgaAS6Drx4TVdv3Mz3fe7ul372rvEvnVrIaooDgNqcvTTmBx8fe/ieB3/j4fGX7T4fF69i1h5to90yL7zGOUBSqd7NhIN/y60hSCiYeZ5lIqm8oU5WdVD7VRjbAHrlb21IYpQ4m5sfI7RqxONyWjSjPzHD2YPHs9llI+hcuCqsXhP9hW/cPPue6zfNLJ9JangRyCTlJ09jdrE6zMKUXJQpb/5ye/n30Vkce6pLXDBaJcQmkPAICx/9bmf/xx8afWdX/mRirtOespDTLcTA4EEAc7Q001Mvy6gNKzGyhFh3wUj+jp+9oHfTlSu6qZdkLEKjbXnMfOeW3lX3nrrvHZzCv69KpU4BfsVOhEOHHnj4k+u37rp6tf/Hi5bM5LOOUIZgmCulG87NL33HCw69c2oKv1rdO4dgvNTbGl1HX0ouyJlI7O09/DD2PvxD7Gjb910AwBcvXX7BRa/a1P07ESnPgVisSVenxbh2LI5W7tjFE42aQQjVeHF+q4IxhL7NLRAjJj8y2wq3Ptr5/U/su+9PFt2hg7Vf6AuZDv7Jriv82mWxm3KnGYDMiRes7OrGTa1/9rlDl31sYnrf4coJsHMaXsS5vPBDly37ylt+5bLsRYFZnhSCUcic3NDJ/EVrsnf+5yVXfWhi+luPz+dqiLlkrv42CXX9FvFM6nIffKzMt2dY268WAc+Sq3jvBDhc6vTJ69F6+TLk9xzWvacTMFZKM4fokjoG60QsAxZZgap2ZfY1X1lBBDltTq7SHgDL2rZyLAh12rCIIPBEbsiAIxMTCON3IWAC+cBYDJeRLc8d+iOED399T/axh8bf9hNrZ7/6hvO4PHPJSVK0PCm99pzuuq8fDf+YT+Af7p6A7SxcvNq5F0ZM9/748MXve/XG9qdesjrnibzeLshy9/Sqjfn6v3Xp6V/hN/ArjXv7BJNg1HBBlrLkl5n7WcHH+cCcHzSYVI3vDNLOW5H+2cu8iDoNGNhGJ4lw0+hi0epkYr+iv9WupCQg8/m9wy3TWCAL3a6R9eAAum7dT1WA5XD8zsLJTn7bdsRr9+y97y+PXviR687xX1pis1kmRBDoOWx9p+fb17d+/j+uGv/tid17D5ZuLZ+ehhdFEc/97OfPefBbV6+MV7WYkoNmILJktnmk69dtCn/3C4cu+e8T0/fuGw4XiRCT5vHdhWJfjlYF2U9MzMMd5lvpe3+IYP0jiLsnoHsfjSFa5XEudDQjlQTM5qn9jJ5JwLzxxSvxnbc0CXvr7YgTE9BDR/bE3RPQrfenPAzI8n4drJ7791TP9/Y9RVmebY+NfeAn1s7+4s3nst3z0lVOY+6eXrE+X/62raffQ+IXvvY2xE/vh+1dD73zhovj7ok9+Yfu3vaBHU+l//LS1ac06zXHZOZIP7WhN/rT58X38jAmdk/AmosxhrqgE8vYXiKBWNEWRsyev3Mavwf8AAsVf39HAoDfvDa/bCwAWc5GzYmFAtPPgCWlUFIM62oECeSy6BgL+LEyd2e2evf/APCOF+l5y1uOhGbVIQ2EWd7+DDs1BfgVEwj3TH9n3ydWXfQ7V6/yd18wNpN3UwhGopcsrO9005u2hJ/ff/Ly21/4wbt/t3/3fen9AICxT1+/bua3fnyVjbEsc0UAmVtY3c7S6zdnN+8/dtHOndP3764goRKtrkroCYKBBDKnrWwn3bCu9/bTV27tHU+tL51OOKFkCS0Aillg7pUpo1bpoXe3PFm0MFgsuVETqpFiFGuLySULiMxRhGTWGd+pTEkKoheB1QVPTkXIZyzwLncmdwUDU4xmsdezIObt1aO+Zl30q69ZMfvXTbkSWJRFL70yReGdsPjCzmhUeCzDhjIhjFqu69blNx275qJbHunGL2T0GQBLN0T/8evXz75xaeypmxCM/c3FBCCUhbN34Jkn0u6sxcvKX3/+yt5f/weXZJvJ5MVmNsDpBL507Qz+/qW85bKlF153VPzKqR6OSNFjxBrDyZdfOJa3CfXrVaNIcJtNxMvWdvW6zeHff+H41beNT3/zaKUAx2A+FIeuqkI2fmbz6RU/vib/F09lBWDXLy1fwamYD1IcsCWGYtxrX8RcbIkDatRQZbzBrfyqLA5WjisgSTAr8JkKF18ehXUjwsqQYdYpYxVlXuwOYyaYLaaKZjGdNOdALpIKnCq549pNM+Gatf7Wx2b51lkVy2Ftx7Gh3UPmKrZPQplZQYfBEVHsOHLF9xZDpOmdCMQdx7705MW/fv2J/ANXLJvR6VQqMyTzJPz0ptPxFWuzNx/txTf3UlGlKhIYNWFdJ0MmydCvDVpmTVpknm7a3Nv0rWPH3z11GL9cmtmIRYYn0UT1KEEMIJJvXdL1rYW7ic0kzabjs1mdy4b32ztbxaAB9xDPYqMA85cvJbwkHmuGUYjKRRSbSXFOHdNIYSwsfvsbqODFXu1fVRV8JOEurW3Npg2dfoZaEtBNDAMOQwHwAjH+frPt+qZy+8MvWjH7i9u2xWsisiTQio2SiDzJV8Ser2l1iyCTMtlJALqu4LBGCk9/gfaS2aaRru9YE9/x6bWXffAN0/vumQQs5oKlynGuQT+qg5xJ1YYDhubODqxqaA0V0+2ntZ2tZCgXQLGHEW70rZI56HAj+6kf1TPn1QPaiuo8y5I/eLsCC89m6LnK4n5DO8tVnsiuI1Q6SnNbsCGx1s8vHy5F/z1wmcJU3tv75KPb3vXydfrTl6/NcTJvVM4l2RVCt9adrAaCrNpNbr6tJ0G6K/3UOdnYxFOzU7/zBN50xQRoeWJMhZtYauyh5mWOkRpkQA6MAMH+qSplhsWOZf1GkJijZ9afAhRE/ZBGGdPy9yqppzqvgfNNUFH1JqT9d7KO0VG1RXBZbLpWhzzEJlh4pqNVxIN4VYKhyhev87HYT8FnuZmqGtE+Xu8+R/ScmvHQ+349EtPTSB+bQPjK/ftv++yj8TPHsnbomOdepuN6HThUiuJqeOo9/Qre7Y02VkshT7R1rcy3r8sntp575VU7p5HiaXGpkYzBVWwBUAx0KDuvAZvb+xUGhgNDhCHv57DKO7TqNV8CHQbuZYnxVoqm5uxXO5TJTg3xpkaR53qvylKRCtSxZHZMnAGKYkRns5Ie7XaePJGfshA8D4KbNYsyD3W73hK2xOrKnVNBB1qmTIEZn50Mh7umC9Vw/NDYe7Ytz1/zlq15i57yXCRVIezNUfFCt6gKTVXpuI0qqgbJKYLMr1mVta5eNfPzDz6CfxAf9c6df/qYTu5Yx6WrO4LR4YnIyoy5llXsra/p9jFK1TVQ6+rcQ/JguHZeXyxojtiYd28BDO7jPFjItgQwNbh3NNHfWrNfLQH1VpQ9Jw6ejOETB+Pd+07otnKlLkgwU3v2FEF6h+Knpld3vrppzF8UmQAfrNvdFH7lThzISy5TVhBH5o6Hjkd8+pF48Alv7QMWXVT6jGY2JmF3T939jd1LL34bYL9x7YZ85Yp2KiL2Ut/YYC3gB5NumwFv1aJKCDiZUnh4pgUzbq2vvvj88fEd6/K/snWprxs1R5Z7OpWUJ1e+rG1s0QxyB90NTAPBQpXmlhJkTHL09zUMAB0hwJDgxQZVgtPdYe4CBVlR9agwJOgwGrzYWngoZECSsdbQDAZXqrRvFRvdFggfjQAD6T3J5AqBFmSMcoWnM+O+060jn72v85lTp751ZJHxrASgsXUv2viLFx573bp2b2lKTFZq+cVulBQl5q7YMhuNNMtynym3IxhlCEtOZ/B7Ttj+jx9u3YrH9x5+Np1OlVd22ZrnbXvD1u4NW8bS6uBKmadMhKIZCMqUugCQwxjobh5QsCKv48JysJXT2qdyhQMzrSN3HuUn9h/c/+j/BRTqLM5a2fnbAAAAAElFTkSuQmCC"></div>
@@ -298,7 +344,7 @@ button.ref-row:hover{background:var(--alt)}
 
   <!-- ===================== BTP ===================== -->
   <section id="page-btp" role="tabpanel" hidden style="display:flex;flex-direction:column;gap:12px">
-    <p class="note" style="margin:0">La pagina BTP lavora direttamente nel browser: premi <b>Scarica dati</b> per leggere il listino del momento. Chiave e modello Gemini si impostano in <b>Gestione</b>.<br><span id="btp-store" hidden></span></p>
+    <p class="note" style="margin:0">La pagina BTP lavora direttamente nel browser: premi <b>Scarica dati</b> per leggere il listino del momento. Chiave e modello Gemini si impostano in <b>Gestione</b>.</p>
     <div id="btp-frame"></div>
   </section>
 
@@ -424,6 +470,12 @@ button.ref-row:hover{background:var(--alt)}
       </div>
       <div class="err" id="cfg-err"></div>
     </section>
+
+    <section class="card" id="sec-card">
+      <div class="card-title">Protezione con impronta e PIN</div>
+      <div id="sec-body"></div>
+      <div class="err" id="sec-err"></div>
+    </section>
   </section>
 </div>
 
@@ -447,6 +499,9 @@ var CONFIG_FISSA = {
   branch: "main",       // ramo del repository
   token: "",            // token GitHub (github_pat_...)
   gemini: "",           // chiave Gemini (AIzaSy...)
+
+  // ---- Scritta in fondo alla schermata di sblocco ----
+  firma: "Cruscotto Borsa - Sviluppato da Elio Rinaldo - Versione 1.1 - 2026",
 
   // ---- Indirizzi internet del cruscotto ----
   indirizzi: {
@@ -562,13 +617,18 @@ var CONFIG_FISSA = {
     var c = null;
     try { c = JSON.parse(store.get(KEY) || "null"); } catch (e) { c = null; }
     c = c || {};
+    // il token sta cifrato (protezione con impronta e PIN): disponibile solo a cruscotto sbloccato
+    if (prot) c.token = secrets ? secrets.token || "" : "";
     ["owner", "repo", "branch", "token"].forEach(function (k) { if (fixed(k)) c[k] = fixed(k); });
     var link = EMBEDDED && EMBEDDED.collegamento;
     if (link) { c.owner = c.owner || link.owner; c.repo = c.repo || link.repo; c.branch = c.branch || link.branch; }
     c.branch = c.branch || "main";
     return c;
   }
-  function saveCfg(c) { store.set(KEY, JSON.stringify(c)); }
+  function saveCfg(c) {
+    // utente, repository e ramo restano in chiaro; il token solo cifrato
+    store.set(KEY, JSON.stringify({ owner: c.owner, repo: c.repo, branch: c.branch }));
+  }
   function cfgReady() {
     var c = loadCfg();
     if (!c.owner || !c.repo || !c.token) {
@@ -579,7 +639,270 @@ var CONFIG_FISSA = {
     }
     return c;
   }
-  function geminiKey() { return fixed("gemini") || store.get("gemini_api_key") || ""; }
+  function geminiKey() { return fixed("gemini") || (secrets && secrets.gemini) || (prot ? "" : store.get("gemini_api_key")) || ""; }
+
+  // ------------------------------------------------------------ protezione con impronta e PIN
+  // Token GitHub e chiave Gemini sono cifrati nel dispositivo (AES-GCM) con una chiave casuale,
+  // a sua volta cifrata due volte: con il PIN (PBKDF2) e, se attiva, con l'impronta (passkey con
+  // estensione PRF). All'apertura il cruscotto resta bloccato finché non si sblocca. La protezione
+  // è obbligatoria ovunque si salvi un token: senza PIN il token non viene salvato.
+  var PROT_KEY = "cruscotto.protezione", prot = null, secrets = null, dekRaw = null, afterUnlock = null, pendingSecrets = null;
+  try { prot = JSON.parse(store.get(PROT_KEY) || "null"); } catch (e) { prot = null; }
+  var TE = window.TextEncoder ? new TextEncoder() : null, TD = window.TextDecoder ? new TextDecoder() : null;
+  function saveProt() { if (prot) store.set(PROT_KEY, JSON.stringify(prot)); else store.del(PROT_KEY); }
+  function cryptoOk() { return !!(window.crypto && crypto.subtle && window.isSecureContext && TE); }
+  function bioPossible() {
+    return cryptoOk() && !!window.PublicKeyCredential && !!navigator.credentials &&
+      (location.protocol === "https:" || location.hostname === "localhost");
+  }
+  // l'impronta si propone solo se il dispositivo ha un sensore (o il volto) utilizzabile
+  var bioAvail = false;
+  var bioCheck = (bioPossible() && PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable
+    ? PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable().catch(function () { return false; })
+    : Promise.resolve(false)).then(function (v) { bioAvail = !!v; return bioAvail; });
+  function bioReady() { return bioPossible() && bioAvail; }
+  function b64(buf) { var s = "", a = new Uint8Array(buf); for (var i = 0; i < a.length; i++) s += String.fromCharCode(a[i]); return btoa(s); }
+  function unb64(t) { var b = atob(t), a = new Uint8Array(b.length); for (var i = 0; i < b.length; i++) a[i] = b.charCodeAt(i); return a; }
+  function rnd(n) { return crypto.getRandomValues(new Uint8Array(n)); }
+  function aesKey(raw) { return crypto.subtle.importKey("raw", raw, "AES-GCM", false, ["encrypt", "decrypt"]); }
+  function seal(key, bytes) {
+    var iv = rnd(12);
+    return crypto.subtle.encrypt({ name: "AES-GCM", iv: iv }, key, bytes).then(function (ct) { return { iv: b64(iv), ct: b64(ct) }; });
+  }
+  function unseal(key, box) { return crypto.subtle.decrypt({ name: "AES-GCM", iv: unb64(box.iv) }, key, unb64(box.ct)); }
+  function pinKey(pin, salt, iter) {
+    return crypto.subtle.importKey("raw", TE.encode(pin), "PBKDF2", false, ["deriveKey"]).then(function (k) {
+      return crypto.subtle.deriveKey({ name: "PBKDF2", salt: salt, iterations: iter, hash: "SHA-256" }, k, { name: "AES-GCM", length: 256 }, false, ["encrypt", "decrypt"]);
+    });
+  }
+  function prfKey(out) {
+    return crypto.subtle.importKey("raw", out, "HKDF", false, ["deriveKey"]).then(function (k) {
+      return crypto.subtle.deriveKey({ name: "HKDF", hash: "SHA-256", salt: TE.encode("cruscotto-borsa"), info: TE.encode("impronta") }, k, { name: "AES-GCM", length: 256 }, false, ["encrypt", "decrypt"]);
+    });
+  }
+  function storeSecrets(sec) {
+    secrets = { token: sec.token || "", gemini: sec.gemini || "" };
+    return aesKey(dekRaw).then(function (k) { return seal(k, TE.encode(JSON.stringify(secrets))); })
+      .then(function (box) { prot.sec = box; saveProt(); });
+  }
+  function wrapPin(pin) {
+    var salt = rnd(16);
+    return pinKey(pin, salt, prot.iter).then(function (k) { return seal(k, dekRaw); })
+      .then(function (box) { prot.pin = { salt: b64(salt), iv: box.iv, ct: box.ct }; prot.fails = 0; prot.waitUntil = 0; saveProt(); });
+  }
+  function protSetup(pin, lockAfter, wantBio, sec) {
+    dekRaw = rnd(32);
+    prot = { v: 1, iter: 310000, lockAfter: lockAfter, fails: 0, waitUntil: 0 };
+    return wrapPin(pin).then(function () { return storeSecrets(sec); }).then(function () {
+      // le vecchie copie in chiaro vengono cancellate
+      store.del("gemini_api_key");
+      try { var c = JSON.parse(store.get(KEY) || "null"); if (c && c.token) { delete c.token; store.set(KEY, JSON.stringify(c)); } } catch (e) { /* niente */ }
+      return wantBio ? bioEnable().then(function () { return ""; }, function (e) { return e.message; }) : "";
+    });
+  }
+  function bioGet(rawId, prfSalt) {
+    return navigator.credentials.get({ publicKey: { challenge: rnd(32), rpId: location.hostname, timeout: 60000,
+      allowCredentials: [{ type: "public-key", id: rawId }], userVerification: "required",
+      extensions: { prf: { eval: { first: prfSalt } } } } }).then(function (a) {
+      var r = a && a.getClientExtensionResults ? a.getClientExtensionResults().prf : null;
+      if (!r || !r.results || !r.results.first) throw new Error("questo dispositivo non permette di usare l'impronta per cifrare: resta il PIN");
+      return r.results.first;
+    });
+  }
+  function bioEnable() {
+    if (!bioPossible()) return Promise.reject(new Error("l'impronta non è disponibile qui: resta il PIN"));
+    var prfSalt = rnd(32);
+    return navigator.credentials.create({ publicKey: {
+      rp: { name: "Cruscotto Borsa", id: location.hostname },
+      user: { id: rnd(16), name: "cruscotto-borsa", displayName: "Cruscotto Borsa" },
+      challenge: rnd(32),
+      pubKeyCredParams: [{ type: "public-key", alg: -7 }, { type: "public-key", alg: -257 }],
+      authenticatorSelection: { authenticatorAttachment: "platform", userVerification: "required", residentKey: "preferred" },
+      timeout: 60000, extensions: { prf: { eval: { first: prfSalt } } } } }).then(function (cred) {
+      var ext = cred.getClientExtensionResults ? cred.getClientExtensionResults() : {};
+      if (!ext.prf || ext.prf.enabled === false) throw new Error("questo dispositivo non permette di usare l'impronta per cifrare: resta il PIN");
+      var first = ext.prf.results && ext.prf.results.first;
+      return (first ? Promise.resolve(first) : bioGet(cred.rawId, prfSalt)).then(prfKey)
+        .then(function (k) { return seal(k, dekRaw); })
+        .then(function (box) { prot.bio = { id: b64(cred.rawId), salt: b64(prfSalt), iv: box.iv, ct: box.ct }; saveProt(); });
+    }, function (e) { throw new Error(e && e.name === "NotAllowedError" ? "impronta annullata: resta il PIN" : "impronta non attivata (" + (e && e.message || e) + "): resta il PIN"); });
+  }
+  function finishUnlock(dek) {
+    dekRaw = new Uint8Array(dek);
+    return aesKey(dekRaw).then(function (k) { return unseal(k, prot.sec); })
+      .then(function (pt) { secrets = JSON.parse(TD.decode(pt)); });
+  }
+  function unlockBio() {
+    return bioGet(unb64(prot.bio.id), unb64(prot.bio.salt)).then(prfKey)
+      .then(function (k) { return unseal(k, prot.bio); }).then(finishUnlock);
+  }
+  function unlockPin(pin) {
+    return pinKey(pin, unb64(prot.pin.salt), prot.iter).then(function (k) { return unseal(k, prot.pin); })
+      .then(function (dek) { prot.fails = 0; prot.waitUntil = 0; saveProt(); return finishUnlock(dek); }, function () {
+        prot.fails = (prot.fails || 0) + 1;
+        if (prot.fails >= 5) prot.waitUntil = Date.now() + 30000 * Math.pow(2, prot.fails - 5);
+        saveProt();
+        throw new Error("pin");
+      });
+  }
+  function lockDelay() { return prot && prot.lockAfter ? prot.lockAfter * 60000 : 30000; }
+  function firma() { return String((CONFIG_FISSA && CONFIG_FISSA.firma) || "Cruscotto Borsa - Sviluppato da Elio Rinaldo - Versione 1.1 - 2026"); }
+  function lkErr(t) { $("lk-err").textContent = t || ""; }
+  function lkShow(area) {
+    ["lk-fp-area", "lk-pin-area", "lk-setup-area"].forEach(function (id) { $(id).hidden = id !== area; });
+  }
+  function showLock(mode) {
+    var img = document.querySelector("header .logo img");
+    if (img) $("lk-img").src = img.src;
+    $("lk-firma").textContent = firma();
+    $("lock").hidden = false; document.body.classList.add("locked"); lkErr("");
+    if (mode === "setup") {
+      $("lk-sub").textContent = "Il cruscotto contiene il tuo portafoglio: per proteggerlo scegli un PIN. Token e chiave Gemini verranno cifrati su questo dispositivo.";
+      $("lk-bio-row").hidden = true; $("lk-bio").checked = false;
+      bioCheck.then(function (v) { $("lk-bio-row").hidden = !v; $("lk-bio").checked = v; });
+      $("lk-setup-cancel").hidden = !pendingSecrets || !!pendingSecrets.migrating;
+      lkShow("lk-setup-area"); $("lk-new1").value = ""; $("lk-new2").value = ""; $("lk-new1").focus();
+      return;
+    }
+    $("lk-sub").textContent = "Sblocca per vedere i tuoi dati";
+    lkShow(""); $("lk-to-fp").hidden = true;
+    bioCheck.then(function () {
+      var fp = !!(prot.bio && bioReady());
+      $("lk-to-fp").hidden = !fp;
+      if (fp) { lkShow("lk-fp-area"); tryBio(); }
+      else { lkShow("lk-pin-area"); $("lk-pin").focus(); }
+      waitInfo();
+    });
+  }
+  function hideLock() { $("lock").hidden = true; document.body.classList.remove("locked"); lkErr(""); }
+  function unlocked() {
+    hideLock();
+    var fn = afterUnlock; afterUnlock = null;
+    if (fn) fn();
+    renderSecCard();
+  }
+  function tryBio() {
+    lkErr("");
+    unlockBio().then(unlocked, function (e) {
+      lkErr(e && e.name === "NotAllowedError" ? "Impronta annullata: riprova o usa il PIN." : "Impronta non riconosciuta: riprova o usa il PIN.");
+    });
+  }
+  var waitTimer = null;
+  function waitInfo() {
+    clearInterval(waitTimer);
+    function tick() {
+      var left = Math.ceil(((prot && prot.waitUntil) || 0) - Date.now()) / 1000;
+      if (left > 0) { lkErr("Troppi tentativi: riprova tra " + Math.ceil(left) + " secondi."); $("lk-pin-go").disabled = true; }
+      else { $("lk-pin-go").disabled = false; clearInterval(waitTimer); if (/Troppi tentativi/.test($("lk-err").textContent)) lkErr(""); }
+    }
+    tick(); waitTimer = setInterval(tick, 1000);
+  }
+  function tryPin() {
+    var pin = $("lk-pin").value.trim();
+    if (!pin) return;
+    if (Date.now() < (prot.waitUntil || 0)) return waitInfo();
+    $("lk-pin-go").disabled = true;
+    unlockPin(pin).then(function () { $("lk-pin").value = ""; $("lk-pin-go").disabled = false; unlocked(); }, function () {
+      $("lk-pin").value = ""; $("lk-pin-go").disabled = false;
+      var left = 5 - (prot.fails || 0);
+      if (left > 0) lkErr("PIN errato: ancora " + left + (left === 1 ? " tentativo" : " tentativi") + " prima di una breve attesa.");
+      waitInfo();
+    });
+  }
+  function forgotPin() {
+    if (!window.confirm("Cancello token, chiave Gemini e dati salvati da questo dispositivo? Poi potrai reinserire il token in Gestione (anche rigenerandolo su GitHub).")) return;
+    prot = null; secrets = null; dekRaw = null; saveProt();
+    store.del("gemini_api_key");
+    try { var c = JSON.parse(store.get(KEY) || "null"); if (c) { delete c.token; store.set(KEY, JSON.stringify(c)); } } catch (e) { /* niente */ }
+    try { if (window.caches) caches.delete("cruscotto-dati"); } catch (e) { /* niente */ }
+    location.reload();
+  }
+  function doSetup() {
+    var a = $("lk-new1").value.trim(), b = $("lk-new2").value.trim();
+    if (!/^\d{6,}$/.test(a)) { lkErr("Il PIN deve avere almeno 6 cifre."); return; }
+    if (a !== b) { lkErr("I due PIN non coincidono."); return; }
+    if (/^(\d)\1+$/.test(a) || "0123456789".indexOf(a) >= 0 || "9876543210".indexOf(a) >= 0) { lkErr("PIN troppo facile: evita cifre tutte uguali o in fila."); return; }
+    $("lk-setup-go").disabled = true; lkErr("");
+    var sec = pendingSecrets || { token: "", gemini: "" };
+    protSetup(a, Number($("lk-after").value), $("lk-bio").checked && bioReady(), sec).then(function (bioMsg) {
+      $("lk-setup-go").disabled = false;
+      var done = pendingSecrets && pendingSecrets.done; pendingSecrets = null;
+      hideLock(); renderSecCard();
+      status("Protezione attiva" + (prot.bio ? " con impronta e PIN." : " con il PIN.") + (bioMsg ? " Impronta: " + bioMsg + "." : ""));
+      if (done) done(); else if (afterUnlock) unlocked();
+    }, function (e) { $("lk-setup-go").disabled = false; lkErr("Non riesco ad attivare la protezione: " + e.message); });
+  }
+  // chiede il PIN (prima volta) e poi salva token e chiave cifrati
+  function protectAndSave(sec, done) {
+    if (!cryptoOk()) {
+      status("Qui il token non si può proteggere: usa la web app oppure scrivi il token nel blocco CONFIG_FISSA del file da computer.");
+      return false;
+    }
+    if (prot && secrets) { storeSecrets(sec).then(function () { renderSecCard(); if (done) done(); }); return true; }
+    pendingSecrets = { token: sec.token, gemini: sec.gemini, done: done };
+    showLock("setup");
+    return true;
+  }
+  $("lk-fp-go").addEventListener("click", tryBio);
+  $("lk-to-pin").addEventListener("click", function () { lkErr(""); lkShow("lk-pin-area"); $("lk-pin").focus(); waitInfo(); });
+  $("lk-to-fp").addEventListener("click", function () { lkShow("lk-fp-area"); tryBio(); });
+  $("lk-pin-go").addEventListener("click", tryPin);
+  $("lk-pin").addEventListener("keydown", function (e) { if (e.key === "Enter") tryPin(); });
+  $("lk-forgot").addEventListener("click", forgotPin);
+  $("lk-setup-go").addEventListener("click", doSetup);
+  $("lk-new2").addEventListener("keydown", function (e) { if (e.key === "Enter") doSetup(); });
+  $("lk-setup-cancel").addEventListener("click", function () { pendingSecrets = null; hideLock(); status("Token non salvato: per salvarlo serve un PIN."); });
+  // nuovo blocco quando si torna all'app dopo il tempo scelto (chiudere l'app la blocca sempre)
+  var hiddenAt = 0;
+  document.addEventListener("visibilitychange", function () {
+    if (!prot || !secrets) return;
+    if (document.visibilityState === "hidden") { hiddenAt = Date.now(); return; }
+    if (hiddenAt && Date.now() - hiddenAt > lockDelay()) { secrets = null; dekRaw = null; location.reload(); }
+  });
+  function renderSecCard() {
+    var html = "";
+    var fileToken = !!fixed("token");
+    if (fileToken) html += '<p class="sec-warn" style="margin:0 0 10px">Il token è scritto nel blocco CONFIG_FISSA di questo file: chi ha il file può leggerlo. Per proteggerlo usa la web app, oppure togli il token dal file e inseriscilo qui sotto in Collegamento a GitHub.</p>';
+    if (!cryptoOk()) {
+      html += '<p class="k" style="margin:0">Qui la protezione non è disponibile e il token non si può salvare: usa la web app.</p>';
+    } else if (!prot) {
+      html += '<p class="k" style="margin:0">La protezione si attiva da sola quando salvi il token o la chiave Gemini: ti verrà chiesto un PIN e, se il dispositivo lo permette, l’impronta.</p>';
+    } else if (!secrets) {
+      html += '<p class="k" style="margin:0">Cruscotto bloccato.</p>';
+    } else {
+      var opts = [[0, "A ogni apertura"], [5, "Dopo 5 minuti in sottofondo"], [60, "Dopo 1 ora"], [480, "Dopo 8 ore"]].map(function (o) {
+        return '<option value="' + o[0] + '"' + (o[0] === prot.lockAfter ? " selected" : "") + ">" + o[1] + "</option>";
+      }).join("");
+      html += '<div class="sec-on">✓ Protezione attiva: ' + (prot.bio ? "impronta e PIN" : "solo PIN") + ".</div>" +
+        '<div class="form" style="margin-top:12px;align-items:center">' +
+        (bioReady() ? '<label class="chk" style="flex:1 1 260px;flex-direction:row"><input type="checkbox" id="sec-bio"' + (prot.bio ? " checked" : "") + "> Accesso con impronta (se spento, si entra solo con il PIN)</label>" :
+          '<p class="k" style="margin:0;flex:1 1 260px">Qui l’impronta non è disponibile: si entra con il PIN.</p>') +
+        '<label style="flex:1 1 200px">Blocca di nuovo<select id="sec-after">' + opts + "</select></label></div>" +
+        '<div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:12px"><button type="button" class="btn accent" id="sec-lock">Blocca ora</button>' +
+        '<button type="button" class="btn" id="sec-chg">Cambia PIN</button></div>' +
+        '<div class="form" id="sec-chg-box" hidden style="margin-top:12px"><label>Nuovo PIN<input type="password" inputmode="numeric" id="sec-p1" autocomplete="off"></label>' +
+        '<label>Ripeti il PIN<input type="password" inputmode="numeric" id="sec-p2" autocomplete="off"></label><button type="button" class="btn accent" id="sec-chg-go">Salva PIN</button></div>' +
+        '<p class="k" style="margin:10px 0 0">Chiudere l’app la blocca sempre. Se dimentichi il PIN, dalla schermata di sblocco puoi cancellare tutto e reinserire il token.</p>';
+    }
+    $("sec-body").innerHTML = html; $("sec-err").textContent = "";
+    if (!prot || !secrets) return;
+    if ($("sec-bio")) $("sec-bio").addEventListener("change", function () {
+      var on = this.checked, box = this;
+      if (!on) { delete prot.bio; saveProt(); renderSecCard(); status("Accesso con impronta spento: si entra solo con il PIN."); return; }
+      box.disabled = true;
+      bioEnable().then(function () { renderSecCard(); status("Accesso con impronta attivo."); },
+        function (e) { box.disabled = false; box.checked = false; $("sec-err").textContent = e.message; });
+    });
+    $("sec-after").addEventListener("change", function () { prot.lockAfter = Number(this.value); saveProt(); status("Tempo di blocco salvato."); });
+    $("sec-lock").addEventListener("click", function () { secrets = null; dekRaw = null; location.reload(); });
+    $("sec-chg").addEventListener("click", function () { $("sec-chg-box").hidden = false; $("sec-p1").focus(); });
+    $("sec-chg-go").addEventListener("click", function () {
+      var a = $("sec-p1").value.trim(), b = $("sec-p2").value.trim();
+      if (!/^\d{6,}$/.test(a)) { $("sec-err").textContent = "Il PIN deve avere almeno 6 cifre."; return; }
+      if (a !== b) { $("sec-err").textContent = "I due PIN non coincidono."; return; }
+      wrapPin(a).then(function () { renderSecCard(); status("PIN cambiato."); });
+    });
+  }
   function geminiModel() {
     var m = store.get("gemini_model_v11");
     return GEMINI_MODELS.some(function (x) { return x[0] === m; }) ? m : GEMINI_MODELS[0][0];
@@ -1632,15 +1955,27 @@ var CONFIG_FISSA = {
   // si leggono i dati che la pagina ha già calcolato. Al massimo un salvataggio ogni 30 minuti,
   // salvo quando arrivano titoli in più (le schede che si completano dopo il listino).
   var btpStore = { saving: false, savedSig: "", savedCount: 0, savedAt: 0, lastSig: "", changedAt: 0, timer: null };
-  function storeMsg(text) {
-    ["btp-store", "pf-btp-store"].forEach(function (id) {
-      var el = $(id); if (el) { el.textContent = text; el.hidden = !text; }
-    });
+  // riga dello storico: sotto Scarica dati nella pagina BTP e sotto Scarica dati BTP in Portafoglio
+  // kind: wait (in corso), ok (salvato), warn (non salvato, con il motivo), info
+  var storeTick = null;
+  function storeMsg(text, kind) {
+    btpStore.msg = { text: text, kind: kind };
+    var el = $("pf-btp-store"); if (el) { el.textContent = text ? (kind === "ok" ? "✓ " : "") + text : ""; el.hidden = !text; }
+    try {
+      var d = btpFrame && btpFrame.contentDocument, head = d && d.querySelector("#sectionFilterCard > .card-title");
+      if (!head) return;
+      var line = d.getElementById("st-line");
+      if (!line) { line = d.createElement("div"); line.id = "st-line"; line.innerHTML = '<span class="st-ico"></span><span class="st-txt"></span>'; head.appendChild(line); }
+      line.className = "st-line st-" + (kind || "info"); line.hidden = !text;
+      line.querySelector(".st-ico").textContent = kind === "ok" ? "✓" : kind === "warn" ? "!" : "";
+      line.querySelector(".st-txt").textContent = text || "";
+    } catch (e) { /* niente */ }
   }
+  function hhmm(t) { return new Date(t).toLocaleTimeString("it-IT", { hour: "2-digit", minute: "2-digit" }); }
   function showStoreInfo(info) {
     if (btpStore.saving || btpStore.savedAt || !info || !info.data) return;
     var when = info.data === todayIso() ? "oggi" : "il " + dmy(info.data);
-    storeMsg("Storico BTP: ultimo salvataggio " + when + (info.ora ? " alle " + info.ora : "") + " (" + info.n + " titoli).");
+    storeMsg("Storico BTP: ultimo salvataggio " + when + (info.ora ? " alle " + info.ora : "") + " (" + info.n + " titoli).", "info");
   }
   function btpPricedRows() {
     var rows = btpData();
@@ -1648,15 +1983,27 @@ var CONFIG_FISSA = {
     return Object.keys(rows).map(function (k) { return rows[k]; }).filter(function (b) { return b.prezzo > 0 && b.prezzo < 1000; });
   }
   function storeWatch() {
-    if (EMBEDDED || btpStore.saving || !canCommand()) return;
+    if (btpStore.saving) return;
     var rows = btpPricedRows();
     if (!rows.length) return;
     var sig = rows.length + ":" + rows.reduce(function (a, b) { return a + b.prezzo; }, 0).toFixed(3), now = Date.now();
-    if (sig !== btpStore.lastSig) { btpStore.lastSig = sig; btpStore.changedAt = now; return; }
+    if (EMBEDDED) { if (btpStore.lastSig !== sig) { btpStore.lastSig = sig; storeMsg("Storico BTP: da questo file non si salva. Usa la web app o il file da computer collegato a GitHub.", "warn"); } return; }
+    if (!canCommand()) { if (btpStore.lastSig !== sig) { btpStore.lastSig = sig; storeMsg("Storico BTP non attivo: collega GitHub in Gestione.", "warn"); } return; }
+    if (sig !== btpStore.lastSig) {
+      btpStore.lastSig = sig; btpStore.changedAt = now;
+      if (sig !== btpStore.savedSig) storeMsg("Storico BTP: attendo che il listino sia completo…", "wait");
+      return;
+    }
     if (sig === btpStore.savedSig) return;
     var more = btpStore.savedAt && rows.length > btpStore.savedCount;
     if (now - btpStore.changedAt < (more ? 60000 : 25000)) return;          // aspetta che il listino sia stabile
-    if (btpStore.savedAt && now - btpStore.savedAt < 1800000 && !more) return;  // al massimo uno ogni 30 minuti
+    if (btpStore.savedAt && now - btpStore.savedAt < 1800000 && !more) {   // al massimo uno ogni 30 minuti
+      if (btpStore.throttleSig !== sig) {
+        btpStore.throttleSig = sig;
+        storeMsg("Storico BTP: già salvato alle " + hhmm(btpStore.savedAt) + ", il prossimo salvataggio è possibile dalle " + hhmm(btpStore.savedAt + 1800000) + ".", "info");
+      }
+      return;
+    }
     saveBtpHistory(rows, sig);
   }
   function cleanField(v) { return String(v == null ? "" : v).replace(/[|\r\n]+/g, " ").trim().slice(0, 80); }
@@ -1665,7 +2012,7 @@ var CONFIG_FISSA = {
     var day = new Date().getDay();
     if (day === 0 || day === 6) {
       btpStore.savedSig = sig;
-      storeMsg("Storico BTP: sabato e domenica non si salva, la Borsa è chiusa.");
+      storeMsg("Storico BTP: sabato e domenica non si salva, la Borsa è chiusa.", "warn");
       return;
     }
     var c = loadCfg(), started = Date.now() - 15000;
@@ -1674,11 +2021,17 @@ var CONFIG_FISSA = {
         numField(b.rendimento_netto), numField(b.duration_mod), cleanField(b.categoria), numField(b.frequenza)].join("|");
     }).join("\n");
     btpStore.saving = true;
-    storeMsg("Storico BTP: salvataggio di " + rows.length + " titoli in corso su GitHub…");
-    function finish(msg, ok) {
+    var t0 = Date.now();
+    function progress() {
+      var sec = Math.floor((Date.now() - t0) / 1000);
+      storeMsg("Storico BTP: invio di " + rows.length + " titoli a GitHub, di solito 1–3 minuti… (" + Math.floor(sec / 60) + ":" + pad2(sec % 60) + ")", "wait");
+    }
+    progress(); clearInterval(storeTick); storeTick = setInterval(progress, 1000);
+    function finish(msg, ok, kind) {
+      clearInterval(storeTick);
       btpStore.saving = false; btpStore.savedAt = Date.now();
       if (ok) { btpStore.savedSig = sig; btpStore.savedCount = rows.length; }
-      storeMsg(msg);
+      storeMsg(msg, kind || (ok ? "ok" : "warn"));
     }
     function poll(waited) {
       return sleep(10000).then(function () {
@@ -1695,8 +2048,8 @@ var CONFIG_FISSA = {
       .then(function () { return getFile(c, "data/ultimo_storico_btp.json", true); })
       .then(function (t) {
         var j = t ? JSON.parse(t) : null;
-        if (j && Date.parse(j.quando) >= started - 60000) finish("Storico BTP: " + j.esito, j.ok !== false);
-        else finish("Storico BTP: salvataggio inviato, l'esito compare con Aggiorna.", true);
+        if (j && Date.parse(j.quando) >= started - 60000) finish("Storico BTP: " + String(j.esito).replace(/\s*✓\s*$/, ""), j.ok !== false);
+        else finish("Storico BTP: salvataggio inviato, l'esito compare con Aggiorna.", true, "info");
         return getFile(c, "data/btp_ultimi.json", true).then(function (t2) {
           if (t2) { try { storedBtp = JSON.parse(t2); renderPortfolio(); } catch (e) { /* niente */ } }
         });
@@ -1706,7 +2059,7 @@ var CONFIG_FISSA = {
 
   function openBtp() {
     if (btpFrame) { syncBtp(); return; }
-    if (!btpStore.timer && !EMBEDDED) btpStore.timer = setInterval(storeWatch, 5000);
+    if (!btpStore.timer) btpStore.timer = setInterval(storeWatch, 5000);
     var src = btpSource();
     if (!src) { $("btp-frame").innerHTML = '<div class="card empty">La pagina BTP non è inclusa in questo file.</div>'; return; }
     var hide = "<style>body>.container>header,#sectionApiCard{display:none!important}" +
@@ -1734,6 +2087,10 @@ var CONFIG_FISSA = {
       "#sectionFilterCard .card-body{display:flex;flex-direction:column}#sectionFilterCard.collapsed .card-body{display:none!important}#sectionFilterCard .card-body>*{margin-top:0}" +
       "#sectionFilterCard .download-actions-row{order:99;margin:6px 0 0!important;justify-content:flex-start}" +
       "#btnAggiornaDati{background:none!important;border:0!important;color:var(--text-muted)!important;text-decoration:underline;font-weight:500!important;font-size:13px!important;min-height:32px!important;padding:4px 0!important}}</style>" +
+      "<style>.st-line{flex-basis:100%;display:flex;gap:8px;align-items:center;font-size:13px;font-weight:600;color:var(--text);background:var(--surface-alt);border:1px solid var(--border);border-radius:8px;padding:8px 10px;line-height:1.35}" +
+      ".st-line[hidden]{display:none}.st-ico{flex:none;width:14px;text-align:center}.st-wait .st-ico{width:12px;height:12px;border-radius:50%;border:2px solid var(--brand-orange);border-right-color:transparent;animation:stspin 1s linear infinite}" +
+      ".st-ok .st-ico{color:#16a34a}.st-warn .st-ico{color:var(--brand-orange)}@keyframes stspin{to{transform:rotate(360deg)}}</style>" +
+      "<script>(function(){try{var o=Storage.prototype.setItem;Storage.prototype.setItem=function(k,v){if(k==='gemini_api_key')return;return o.apply(this,arguments);};localStorage.removeItem('gemini_api_key');}catch(e){}})();<\/script>" +
       "<script>document.addEventListener('DOMContentLoaded',function(){" +
       "document.querySelectorAll('.card-title>span:first-child').forEach(function(e){e.textContent=e.textContent.replace(/^\\s*\\d+\\.\\s*/,'');});" +
       "var t=document.querySelector('#sectionFilterCard .card-title-right'),d=document.getElementById('btnAvviaTutto'),z=document.getElementById('btnResetFiltri');" +
@@ -1756,7 +2113,11 @@ var CONFIG_FISSA = {
     btpFrame = document.createElement("iframe");
     btpFrame.title = "Analisi BTP";
     btpFrame.setAttribute("srcdoc", src);
-    btpFrame.addEventListener("load", function () { btpReady = true; syncBtp(); fitBtp(); var q = btpQueue; btpQueue = []; q.forEach(function (f) { f(); }); });
+    btpFrame.addEventListener("load", function () {
+      btpReady = true; syncBtp(); fitBtp();
+      if (btpStore.msg && btpStore.msg.text) setTimeout(function () { storeMsg(btpStore.msg.text, btpStore.msg.kind); }, 300);
+      var q = btpQueue; btpQueue = []; q.forEach(function (f) { f(); });
+    });
     $("btp-frame").appendChild(btpFrame);
     btpTimer = setInterval(fitBtp, 800);
   }
@@ -1921,14 +2282,18 @@ var CONFIG_FISSA = {
     var k = $("gm-key").value.trim();
     if (!k) { $("gm-err").textContent = "Incolla la chiave Gemini."; return; }
     $("gm-err").textContent = "";
-    store.set("gemini_api_key", k);
     store.set("gemini_model_v11", $("gm-model").value);
-    refreshModelLabels(); syncBtp();
-    status("Impostazioni di Gemini salvate.");
+    var cur = secrets || { token: (loadCfg().token && !fixed("token") ? loadCfg().token : ""), gemini: "" };
+    protectAndSave({ token: cur.token, gemini: k }, function () {
+      refreshModelLabels(); syncBtp();
+      status("Impostazioni di Gemini salvate (chiave cifrata su questo dispositivo).");
+    });
   });
   $("gm-model").addEventListener("change", function () { store.set("gemini_model_v11", $("gm-model").value); refreshModelLabels(); syncBtp(); });
   $("gm-forget").addEventListener("click", function () {
-    store.del("gemini_api_key"); $("gm-key").value = fixed("gemini");
+    store.del("gemini_api_key");
+    if (prot && secrets) storeSecrets({ token: secrets.token, gemini: "" });
+    $("gm-key").value = fixed("gemini");
     status(fixed("gemini") ? "Chiave cancellata dal browser: resta quella scritta nel file." : "Chiave Gemini cancellata da questo browser.");
   });
   $("btn-save").addEventListener("click", function () {
@@ -1936,12 +2301,20 @@ var CONFIG_FISSA = {
       branch: $("cfg-branch").value.trim() || "main", token: $("cfg-token").value.trim() };
     if (!c.owner || !c.repo || !c.token) { $("cfg-err").textContent = "Compila utente, repository e token."; return; }
     $("cfg-err").textContent = "";
-    saveCfg(c);
-    showPage("titoli");
-    loadAll();
+    if (fixed("token") && c.token === fixed("token")) { saveCfg(c); showPage("titoli"); loadAll(); return; }
+    protectAndSave({ token: c.token, gemini: (secrets && secrets.gemini) || "" }, function () {
+      saveCfg(c);
+      showPage("titoli");
+      loadAll();
+    });
   });
   $("btn-forget").addEventListener("click", function () {
     store.del(KEY); $("cfg-token").value = fixed("token");
+    if (prot && secrets) {
+      if (secrets.gemini) storeSecrets({ token: "", gemini: secrets.gemini }).then(renderSecCard);
+      else if (!fixed("token")) { prot = null; secrets = null; dekRaw = null; saveProt(); renderSecCard(); }
+      else storeSecrets({ token: "", gemini: "" }).then(renderSecCard);
+    }
     // nella web app cancella anche i dati conservati per l'uso senza rete
     try { if (window.caches) caches.delete("cruscotto-dati"); } catch (e) { /* niente */ }
     status(fixed("token") ? "Token cancellato dal browser: resta quello scritto nel file." : "Token cancellato da questo browser.");
@@ -1960,11 +2333,27 @@ var CONFIG_FISSA = {
 
   // ------------------------------------------------------------ avvio (dopo la lettura di tutto il file)
   function start() {
-  applyTheme(document.documentElement.getAttribute("data-theme") || "light");
+    applyTheme(document.documentElement.getAttribute("data-theme") || "light");
+    if (prot && prot.sec && prot.pin) { afterUnlock = realStart; showLock("lock"); return; }
+    if (prot) { prot = null; saveProt(); }
+    // versione precedente: token o chiave salvati in chiaro -> si sceglie il PIN prima di continuare
+    var legacyTok = "", legacyKey = store.get("gemini_api_key") || "";
+    try { var lc = JSON.parse(store.get(KEY) || "null"); legacyTok = (lc && lc.token) || ""; } catch (e) { legacyTok = ""; }
+    if ((legacyTok || legacyKey || fixed("token")) && cryptoOk()) {
+      pendingSecrets = { token: legacyTok, gemini: legacyKey, migrating: true, done: realStart };
+      showLock("setup");
+      $("lk-sub").textContent = "Novità: il cruscotto ora si apre con il PIN e, se vuoi, con l’impronta. Scegli il PIN: token e chiave Gemini già salvati verranno cifrati su questo dispositivo.";
+      return;
+    }
+    realStart();
+  }
+  function realStart() {
+  renderSecCard();
   document.querySelectorAll(".gemini").forEach(initGemini);
   var cfg = loadCfg();
   $("cfg-owner").value = cfg.owner || ""; $("cfg-repo").value = cfg.repo || "";
   $("cfg-branch").value = cfg.branch || "main"; $("cfg-token").value = cfg.token || "";
+  $("gm-key").value = geminiKey();
   var startPage = store.get("cruscotto.pagina");
   showPage(["titoli", "btp", "riferimenti", "portafoglio", "gestione"].indexOf(startPage) >= 0 ? startPage : "titoli");
   $("aistudio-link").href = URLS.aistudio || "https://aistudio.google.com/apikey";
