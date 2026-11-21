@@ -4,7 +4,7 @@
    - I dati letti dal repository privato (cartella data) vengono conservati sul dispositivo,
      così senza rete si vede l'ultima analisi scaricata.
    La riga VERSIONE viene riscritta a ogni rilascio dal programma che genera la web app. */
-const VERSIONE = "4e2f7ab0a832";
+const VERSIONE = "d1ea93a1109e";
 const CACHE_APP = "cruscotto-app-" + VERSIONE;
 const CACHE_DATI = "cruscotto-dati";
 const FILE_APP = ["./", "index.html", "manifest.webmanifest", "favicon.ico", "apple-touch-icon.png",

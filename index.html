@@ -853,11 +853,23 @@ var CONFIG_FISSA = {
   $("lk-new2").addEventListener("keydown", function (e) { if (e.key === "Enter") doSetup(); });
   $("lk-setup-cancel").addEventListener("click", function () { pendingSecrets = null; hideLock(); status("Token non salvato: per salvarlo serve un PIN."); });
   // nuovo blocco quando si torna all'app dopo il tempo scelto (chiudere l'app la blocca sempre)
+  // il blocco non ricarica la pagina: token e chiave escono dalla memoria e dai campi,
+  // il resto (compreso il listino BTP scaricato) resta sotto la schermata di sblocco
+  function lockNow() {
+    secrets = null; dekRaw = null;
+    $("cfg-token").value = fixed("token"); $("gm-key").value = fixed("gemini");
+    try { var k = btpFrame && btpFrame.contentDocument.getElementById("apiKey"); if (k) k.value = ""; } catch (e) { /* niente */ }
+    afterUnlock = function () {
+      $("cfg-token").value = loadCfg().token || ""; $("gm-key").value = geminiKey(); syncBtp();
+      if (!EMBEDDED && lastLoad && Date.now() - lastLoad > 600000) loadAll();
+    };
+    showLock("lock");
+  }
   var hiddenAt = 0;
   document.addEventListener("visibilitychange", function () {
     if (!prot || !secrets) return;
     if (document.visibilityState === "hidden") { hiddenAt = Date.now(); return; }
-    if (hiddenAt && Date.now() - hiddenAt > lockDelay()) { secrets = null; dekRaw = null; location.reload(); }
+    if (hiddenAt && Date.now() - hiddenAt > lockDelay()) lockNow();
   });
   function renderSecCard() {
     var html = "";
@@ -894,7 +906,7 @@ var CONFIG_FISSA = {
         function (e) { box.disabled = false; box.checked = false; $("sec-err").textContent = e.message; });
     });
     $("sec-after").addEventListener("change", function () { prot.lockAfter = Number(this.value); saveProt(); status("Tempo di blocco salvato."); });
-    $("sec-lock").addEventListener("click", function () { secrets = null; dekRaw = null; location.reload(); });
+    $("sec-lock").addEventListener("click", lockNow);
     $("sec-chg").addEventListener("click", function () { $("sec-chg-box").hidden = false; $("sec-p1").focus(); });
     $("sec-chg-go").addEventListener("click", function () {
       var a = $("sec-p1").value.trim(), b = $("sec-p2").value.trim();
@@ -1203,7 +1215,7 @@ var CONFIG_FISSA = {
   function storedTxt(c) {
     if (!c.stored) return "";
     var d = c.stored.salvato, old = (Date.parse(todayIso()) - Date.parse(d)) / 86400000 > 7;
-    return '<span class="man' + (old ? " old" : "") + '">salvato ' + (d === todayIso() ? "oggi" : dm(d)) + (c.stored.ora ? " " + esc(c.stored.ora) : "") + "</span>";
+    return '<span class="man' + (old ? " old" : "") + '">ultimo prezzo registrato ' + (d === todayIso() ? "oggi" : dm(d)) + (c.stored.ora ? " " + esc(c.stored.ora) : "") + "</span>";
   }
   function priceUi(p, c, wide) {
     if (!c.needsManual || !canCommand()) return { buttons: "", panel: "" };
@@ -1254,7 +1266,7 @@ var CONFIG_FISSA = {
     }).join("");
     var notes = [];
     if (btpUnpriced) notes.push(btpRows ? "Alcuni titoli di Stato non sono nel listino BTP: inserisci il prezzo di oggi con il pulsante sulla posizione." : "I BTP sono al prezzo di acquisto: premi Scarica dati BTP per aggiornarli.");
-    if (storedDay && !btpRows) notes.push("BTP ai prezzi salvati nello storico il " + dmy(storedDay.slice(0, 10)) + (storedDay.length > 10 ? " alle " + storedDay.slice(11) : "") + ": premi Scarica dati BTP per i prezzi del momento.");
+    if (storedDay && !btpRows) notes.push("BTP all'ultimo prezzo registrato nello storico (" + dmy(storedDay.slice(0, 10)) + (storedDay.length > 10 ? " alle " + storedDay.slice(11) : "") + "): premi Scarica dati BTP per i prezzi del momento.");
     if (otherBonds) notes.push("Alcune obbligazioni sono al prezzo di acquisto: inserisci il prezzo di oggi con il pulsante sulla posizione.");
     if (missingFx) notes.push("Per calcolare i pesi delle posizioni in dollari aggiungi EURUSD=X nei Riferimenti.");
     $("pf-note").innerHTML = notes.map(esc).join("<br>");
@@ -1954,7 +1966,14 @@ var CONFIG_FISSA = {
   // (modalità "btp"), che li salva in data/btp/btp_AAAA-MM.csv. Il motore BTP non viene toccato:
   // si leggono i dati che la pagina ha già calcolato. Al massimo un salvataggio ogni 30 minuti,
   // salvo quando arrivano titoli in più (le schede che si completano dopo il listino).
-  var btpStore = { saving: false, savedSig: "", savedCount: 0, savedAt: 0, lastSig: "", changedAt: 0, timer: null };
+  var btpStore = { saving: false, savedSig: "", savedCount: 0, savedAt: 0, lastSig: "", changedAt: 0, firstSeenAt: 0, timer: null };
+  try {
+    var bs = JSON.parse(sessionStorage.getItem("cruscotto.storico_btp") || "null");
+    if (bs) { btpStore.savedSig = bs.sig || ""; btpStore.savedCount = bs.n || 0; btpStore.savedAt = bs.at || 0; }
+  } catch (e) { /* niente */ }
+  function rememberSaved() {
+    try { sessionStorage.setItem("cruscotto.storico_btp", JSON.stringify({ sig: btpStore.savedSig, n: btpStore.savedCount, at: btpStore.savedAt })); } catch (e) { /* niente */ }
+  }
   // riga dello storico: sotto Scarica dati nella pagina BTP e sotto Scarica dati BTP in Portafoglio
   // kind: wait (in corso), ok (salvato), warn (non salvato, con il motivo), info
   var storeTick = null;
@@ -1983,25 +2002,37 @@ var CONFIG_FISSA = {
     return Object.keys(rows).map(function (k) { return rows[k]; }).filter(function (b) { return b.prezzo > 0 && b.prezzo < 1000; });
   }
   function storeWatch() {
-    if (btpStore.saving) return;
+    if (btpStore.saving || (prot && !secrets)) return;     // a cruscotto bloccato non si fa nulla
+    if (btpStore.failAt && Date.now() - btpStore.failAt < 300000) return;   // dopo un errore si riprova tra 5 minuti
     var rows = btpPricedRows();
     if (!rows.length) return;
+    var all = btpData(), total = all ? Object.keys(all).length : rows.length;
     var sig = rows.length + ":" + rows.reduce(function (a, b) { return a + b.prezzo; }, 0).toFixed(3), now = Date.now();
     if (EMBEDDED) { if (btpStore.lastSig !== sig) { btpStore.lastSig = sig; storeMsg("Storico BTP: da questo file non si salva. Usa la web app o il file da computer collegato a GitHub.", "warn"); } return; }
     if (!canCommand()) { if (btpStore.lastSig !== sig) { btpStore.lastSig = sig; storeMsg("Storico BTP non attivo: collega GitHub in Gestione.", "warn"); } return; }
-    if (sig !== btpStore.lastSig) {
-      btpStore.lastSig = sig; btpStore.changedAt = now;
-      if (sig !== btpStore.savedSig) storeMsg("Storico BTP: attendo che il listino sia completo…", "wait");
-      return;
-    }
+    if (sig !== btpStore.lastSig) { btpStore.lastSig = sig; btpStore.changedAt = now; if (!btpStore.firstSeenAt) btpStore.firstSeenAt = now; }
     if (sig === btpStore.savedSig) return;
-    var more = btpStore.savedAt && rows.length > btpStore.savedCount;
-    if (now - btpStore.changedAt < (more ? 60000 : 25000)) return;          // aspetta che il listino sia stabile
-    if (btpStore.savedAt && now - btpStore.savedAt < 1800000 && !more) {   // al massimo uno ogni 30 minuti
-      if (btpStore.throttleSig !== sig) {
-        btpStore.throttleSig = sig;
-        storeMsg("Storico BTP: già salvato alle " + hhmm(btpStore.savedAt) + ", il prossimo salvataggio è possibile dalle " + hhmm(btpStore.savedAt + 1800000) + ".", "info");
+    var count = rows.length + " BTP su " + total + " con prezzo";
+    var stable = now - btpStore.changedAt;
+    if (btpStore.savedAt && now - btpStore.savedAt < 1800000) {
+      // già salvato da meno di 30 minuti: si salva di nuovo solo se sono arrivati altri prezzi
+      // (le schede dei singoli titoli completate dopo il listino), a completamento finito
+      if (rows.length <= btpStore.savedCount) {
+        if (btpStore.throttleSig !== sig) {
+          btpStore.throttleSig = sig;
+          storeMsg("Storico BTP: già salvato alle " + hhmm(btpStore.savedAt) + ", il prossimo salvataggio è possibile dalle " + hhmm(btpStore.savedAt + 1800000) + ".", "info");
+        }
+        return;
       }
+      if (stable < 60000) {
+        storeMsg("Storico BTP: salvato alle " + hhmm(btpStore.savedAt) + "; le schede dei titoli si stanno completando (" + count + "), salvo di nuovo a completamento finito…", "wait");
+        return;
+      }
+      return saveBtpHistory(rows, sig);
+    }
+    // primo salvataggio di questo download: appena il listino è fermo per 20 secondi, al massimo dopo 30
+    if (stable < 20000 && now - btpStore.firstSeenAt < 30000) {
+      storeMsg("Storico BTP: attendo il listino… " + count + ".", "wait");
       return;
     }
     saveBtpHistory(rows, sig);
@@ -2009,12 +2040,6 @@ var CONFIG_FISSA = {
   function cleanField(v) { return String(v == null ? "" : v).replace(/[|\r\n]+/g, " ").trim().slice(0, 80); }
   function numField(v) { var n = Number(v); return isFinite(n) && v !== null && v !== "" ? String(Math.round(n * 10000) / 10000) : ""; }
   function saveBtpHistory(rows, sig) {
-    var day = new Date().getDay();
-    if (day === 0 || day === 6) {
-      btpStore.savedSig = sig;
-      storeMsg("Storico BTP: sabato e domenica non si salva, la Borsa è chiusa.", "warn");
-      return;
-    }
     var c = loadCfg(), started = Date.now() - 15000;
     var text = rows.slice(0, 800).map(function (b) {
       return [b.isin, cleanField(b.titolo), numField(b.prezzo), cleanField(b.scadenza), numField(b.cedola_annua),
@@ -2029,8 +2054,9 @@ var CONFIG_FISSA = {
     progress(); clearInterval(storeTick); storeTick = setInterval(progress, 1000);
     function finish(msg, ok, kind) {
       clearInterval(storeTick);
-      btpStore.saving = false; btpStore.savedAt = Date.now();
-      if (ok) { btpStore.savedSig = sig; btpStore.savedCount = rows.length; }
+      btpStore.saving = false; btpStore.firstSeenAt = 0;
+      if (ok) { btpStore.savedAt = Date.now(); btpStore.savedSig = sig; btpStore.savedCount = rows.length; rememberSaved(); }
+      else btpStore.failAt = Date.now();
       storeMsg(msg, kind || (ok ? "ok" : "warn"));
     }
     function poll(waited) {
@@ -2054,7 +2080,7 @@ var CONFIG_FISSA = {
           if (t2) { try { storedBtp = JSON.parse(t2); renderPortfolio(); } catch (e) { /* niente */ } }
         });
       })
-      .catch(function (e) { finish("Storico BTP non salvato: " + e.message + ". Riprovo al prossimo download.", false); });
+      .catch(function (e) { finish("Storico BTP non salvato: " + e.message + ". Riprovo tra 5 minuti.", false); });
   }
 
   function openBtp() {
@@ -2347,8 +2373,17 @@ var CONFIG_FISSA = {
     }
     realStart();
   }
+  function restoreBtp() {
+    // se la pagina BTP ha in memoria un listino recente (sessione del browser), lo rimette senza rete
+    try {
+      var c = JSON.parse(sessionStorage.getItem("btp_unified_parsed_cache_v7") || "null");
+      var m = /cacheListinoMinuti:\s*(\d+)/.exec(btpSource()), ttl = (m ? Number(m[1]) : 10) * 60000;
+      if (c && c.timestamp && Date.now() - c.timestamp < ttl && c.btpList && c.btpList.length) btpDownloadForPortfolio();
+    } catch (e) { /* niente */ }
+  }
   function realStart() {
   renderSecCard();
+  setTimeout(restoreBtp, 800);
   document.querySelectorAll(".gemini").forEach(initGemini);
   var cfg = loadCfg();
   $("cfg-owner").value = cfg.owner || ""; $("cfg-repo").value = cfg.repo || "";
