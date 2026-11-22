@@ -25,13 +25,16 @@
 body{margin:0;background:var(--bg);color:var(--text);font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,Helvetica,Arial,sans-serif;padding:16px 12px 64px}
 .container{max-width:1180px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
 a{color:var(--orange)}a:hover{color:var(--orange-hover)}
-header{background:var(--navy);color:#fff;border-radius:var(--radius);border-bottom:3px solid var(--orange);padding:16px 20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;box-shadow:var(--shadow)}
+header{background:var(--navy);color:#fff;border-radius:var(--radius);border-bottom:3px solid var(--orange);padding:14px 16px 14px 20px;display:flex;align-items:center;gap:16px;box-shadow:var(--shadow)}
 .logo{width:64px;height:52px;border-radius:14px;border:1.5px solid rgba(255,255,255,.16);box-shadow:0 4px 12px rgba(0,0,0,.35);padding:6px;display:flex;align-items:center;justify-content:center;flex:none}
 .logo img{width:100%;height:100%;object-fit:contain;display:block}
 .head-copy{flex:1 1 260px;min-width:0}
 .head-copy h1{margin:0;font-size:23px;font-weight:700;letter-spacing:-.02em;line-height:1.2}
 .head-copy p{margin:2px 0 0;color:#cbd5e1;font-size:13px}
-.theme-btn{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.24);color:#fff;padding:8px 14px;border-radius:8px;font:600 13px/1 inherit;font-family:inherit;cursor:pointer;min-height:40px;white-space:nowrap}
+.sub-short{display:none}@media (max-width:720px){.sub-long{display:none}.sub-short{display:inline}}
+.theme-btn{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.2);color:#fff;width:40px;height:40px;min-height:0;padding:0;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;align-self:flex-start}
+.theme-btn svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.theme-btn .sun{display:none}:root[data-theme="dark"] .theme-btn .sun{display:block}:root[data-theme="dark"] .theme-btn .moon{display:none}
 .theme-btn:hover{background:rgba(243,109,19,.2);border-color:var(--orange)}
 .pages{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:5px;box-shadow:var(--shadow)}
 .pages button{border:0;background:transparent;color:var(--text);font:600 15px/1.2 inherit;font-family:inherit;padding:11px 6px;border-radius:8px;cursor:pointer;min-height:44px}
@@ -193,6 +196,7 @@ button.ref-row:hover{background:var(--alt)}
 #lock .lk-setup label.chk{flex-direction:row;align-items:center;font-size:14px;color:var(--text);font-weight:500}
 #lock .lk-firma{font-size:11px;color:var(--muted);margin-top:18px;text-align:center}
 .chk{display:flex;gap:10px;align-items:center;font-size:14px;font-weight:500;color:var(--text);text-align:left}
+.form label.chk{color:var(--text);font-weight:500;font-size:14px}
 .chk input{min-height:0;width:20px;height:20px;accent-color:var(--orange);flex:none}
 .sec-on{display:flex;gap:10px;align-items:center;background:var(--buy-bg);color:var(--buy);border-radius:10px;padding:10px 12px;font-weight:600;font-size:14px}
 .sec-warn{background:var(--orange-soft);border:1px solid var(--orange-border);border-radius:10px;padding:10px 12px;font-size:14px}
@@ -204,7 +208,8 @@ body.locked{overflow:hidden}
 @media (min-width:721px){.trend{display:block}details.row>summary{grid-template-columns:76px minmax(0,1fr) 130px 120px;padding:12px 18px 12px 8px}}
 @media (max-width:720px){
  body{padding:10px 8px 48px}
- header{padding:12px 14px;gap:12px}
+ header{padding:12px 10px 12px 14px;gap:12px}
+ .theme-btn{width:36px;height:36px}.theme-btn svg{width:18px;height:18px}
  .logo{width:52px;height:42px;border-radius:12px;padding:5px}
  .head-copy h1{font-size:19px}
  .pages button{font-size:12px;padding:10px 1px}
@@ -265,7 +270,10 @@ body.locked{overflow:hidden}
       <h1>Cruscotto Borsa</h1>
       <p id="sub">Segnali su tre orizzonti, riferimenti di mercato e analisi BTP.</p>
     </div>
-    <button type="button" id="btn-theme" class="theme-btn">Tema scuro</button>
+    <button type="button" id="btn-theme" class="theme-btn" aria-label="Tema scuro" title="Tema scuro">
+      <svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11z"/></svg>
+      <svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></svg>
+    </button>
   </header>
 
   <nav class="pages" role="tablist" aria-label="Pagine">
@@ -471,6 +479,16 @@ body.locked{overflow:hidden}
       <div class="err" id="cfg-err"></div>
     </section>
 
+    <section class="card" id="sfx-card">
+      <div class="card-title">Suoni e vibrazione</div>
+      <p class="k" style="margin:0 0 10px">Suoni brevi quando finisce un’operazione che richiede tempo (o non riesce) e allo sblocco; vibrazione a ogni tocco di pagine, titoli e pulsanti. Valgono solo su questo dispositivo; il volume segue anche quello dei contenuti multimediali.</p>
+      <div class="form" style="align-items:center">
+        <label class="chk" style="flex:1 1 140px;flex-direction:row"><input type="checkbox" id="sfx-snd"> Suoni</label>
+        <label style="flex:1 1 160px">Volume<select id="sfx-vol"><option value="0.07">Basso</option><option value="0.16">Medio</option><option value="0.32">Alto</option></select></label>
+        <label class="chk" style="flex:1 1 140px;flex-direction:row"><input type="checkbox" id="sfx-vib"> Vibrazione</label>
+      </div>
+    </section>
+
     <section class="card" id="sec-card">
       <div class="card-title">Protezione con impronta e PIN</div>
       <div id="sec-body"></div>
@@ -641,6 +659,70 @@ var CONFIG_FISSA = {
   }
   function geminiKey() { return fixed("gemini") || (secrets && secrets.gemini) || (prot ? "" : store.get("gemini_api_key")) || ""; }
 
+  // ------------------------------------------------------------ suoni e vibrazione
+  // Toni generati dal browser (nessun file audio). Scelte dell'utente: sblocco "tic tic" (due colpetti
+  // di legno), PIN sbagliato, fine di un'attesa, errore; vibrazione di 16 ms a ogni tocco utile.
+  var SFX_KEY = "cruscotto.suoni", sfxSet = { snd: true, vol: 0.16, vib: true }, actx = null, noiseBuf = null;
+  try { var sv = JSON.parse(store.get(SFX_KEY) || "null"); if (sv) sfxSet = { snd: sv.snd !== false, vol: Number(sv.vol) || 0.16, vib: sv.vib !== false }; } catch (e) { /* niente */ }
+  function sfxSave() { store.set(SFX_KEY, JSON.stringify(sfxSet)); }
+  function audioCtx() {
+    if (!actx) { var AC = window.AudioContext || window.webkitAudioContext; if (!AC) return null; try { actx = new AC(); } catch (e) { return null; } }
+    if (actx.state === "suspended") actx.resume().catch(function () {});
+    return actx;
+  }
+  function tone(f, at, dur, type, rel) {
+    var c = audioCtx(); if (!c) return;
+    var t = c.currentTime + 0.02 + at, o = c.createOscillator(), g = c.createGain(), lp = c.createBiquadFilter();
+    o.type = type || "sine"; o.frequency.setValueAtTime(f, t); lp.type = "lowpass"; lp.frequency.value = 4200;
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(sfxSet.vol * (rel || 1), t + 0.012);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    o.connect(lp); lp.connect(g); g.connect(c.destination); o.start(t); o.stop(t + dur + 0.05);
+  }
+  function tick(at, freq, q, dur, rel) {
+    var c = audioCtx(); if (!c) return;
+    if (!noiseBuf) {
+      noiseBuf = c.createBuffer(1, Math.floor(c.sampleRate * 0.08), c.sampleRate);
+      var d = noiseBuf.getChannelData(0); for (var k = 0; k < d.length; k++) d[k] = Math.random() * 2 - 1;
+    }
+    var t = c.currentTime + 0.02 + at, src = c.createBufferSource(), bp = c.createBiquadFilter(), g = c.createGain();
+    src.buffer = noiseBuf; bp.type = "bandpass"; bp.frequency.value = freq; bp.Q.value = q;
+    g.gain.setValueAtTime(sfxSet.vol * 1.8 * (rel || 1), t); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    src.connect(bp); bp.connect(g); g.connect(c.destination); src.start(t); src.stop(t + dur + 0.02);
+  }
+  function haptic(pattern) { if (sfxSet.vib && navigator.vibrate) { try { navigator.vibrate(pattern || 16); } catch (e) { /* niente */ } } }
+  var SFX = {
+    sblocco: function () { tick(0, 1900, 4, 0.03, 1); tick(0.085, 1900, 4, 0.03, 0.8); },
+    pin: function () { tone(220, 0, 0.16, "triangle", 1.3); tone(175, 0.16, 0.24, "triangle", 1.3); haptic([70, 50, 70]); },
+    fatto: function () { tone(1047, 0, 0.09); tone(1319, 0.07, 0.09); tone(1568, 0.14, 0.22); },
+    errore: function () { tone(196, 0, 0.12, "triangle", 1.4); tone(196, 0.17, 0.2, "triangle", 1.4); haptic([80, 50, 80]); }
+  };
+  function sfx(name) {
+    try {
+      if (!sfxSet.snd) { if (name === "pin" || name === "errore") haptic(name === "pin" ? [70, 50, 70] : [80, 50, 80]); return; }
+      if (SFX[name]) SFX[name]();
+    } catch (e) { /* niente */ }
+  }
+  window.crHaptic = function () { haptic(16); };   // usata anche dalla pagina BTP (stessa origine)
+  // tocchi: pagine, apertura di titoli e posizioni, pulsanti d'azione; in Gestione solo i pulsanti d'azione
+  document.addEventListener("click", function (e) {
+    var t = e.target;
+    if (!t || !t.closest) return;
+    if (t.closest(".pages [data-page]")) return haptic(16);
+    if (t.closest("details.row > summary") || (t.closest("[data-pos]") && !t.closest("[data-px],[data-px-act]"))) return haptic(16);
+    var b = t.closest("button");
+    if (!b || b.disabled) return;
+    if (b.closest("#page-gestione") && (b.closest(".modes") || b.closest("#quick"))) return;   // selezioni in Gestione: niente
+    if (b.matches(".btn, .px-btn, .theme-btn, .lk-link, [data-px-act], [data-edit-pos], [data-kw], .gp-go")) haptic(16);
+  }, true);
+  function sfxCard() {
+    $("sfx-snd").checked = sfxSet.snd; $("sfx-vib").checked = sfxSet.vib; $("sfx-vol").value = String(sfxSet.vol);
+    $("sfx-vib").disabled = !navigator.vibrate;
+  }
+  $("sfx-snd").addEventListener("change", function () { sfxSet.snd = this.checked; sfxSave(); if (sfxSet.snd) sfx("fatto"); });
+  $("sfx-vol").addEventListener("change", function () { sfxSet.vol = Number(this.value); sfxSave(); sfx("fatto"); });
+  $("sfx-vib").addEventListener("change", function () { sfxSet.vib = this.checked; sfxSave(); haptic(16); });
+  sfxCard();
+
   // ------------------------------------------------------------ protezione con impronta e PIN
   // Token GitHub e chiave Gemini sono cifrati nel dispositivo (AES-GCM) con una chiave casuale,
   // a sua volta cifrata due volte: con il PIN (PBKDF2) e, se attiva, con l'impronta (passkey con
@@ -776,6 +858,7 @@ var CONFIG_FISSA = {
   }
   function hideLock() { $("lock").hidden = true; document.body.classList.remove("locked"); lkErr(""); }
   function unlocked() {
+    sfx("sblocco");
     hideLock();
     var fn = afterUnlock; afterUnlock = null;
     if (fn) fn();
@@ -804,6 +887,7 @@ var CONFIG_FISSA = {
     $("lk-pin-go").disabled = true;
     unlockPin(pin).then(function () { $("lk-pin").value = ""; $("lk-pin-go").disabled = false; unlocked(); }, function () {
       $("lk-pin").value = ""; $("lk-pin-go").disabled = false;
+      sfx("pin");
       var left = 5 - (prot.fails || 0);
       if (left > 0) lkErr("PIN errato: ancora " + left + (left === 1 ? " tentativo" : " tentativi") + " prima di una breve attesa.");
       waitInfo();
@@ -987,7 +1071,9 @@ var CONFIG_FISSA = {
   function renderData(data) {
     current = data;
     var when = new Date(data.generato).toLocaleString("it-IT", { dateStyle: "long", timeStyle: "short" });
-    $("sub").textContent = "Aggiornato il " + when + ".";
+    // sul telefono la data è in forma breve, così resta su una riga accanto al pulsante sole/luna
+    var dd = new Date(data.generato), shortWhen = isNaN(dd) ? when : pad2(dd.getDate()) + "/" + pad2(dd.getMonth() + 1) + "/" + dd.getFullYear() + " alle " + pad2(dd.getHours()) + ":" + pad2(dd.getMinutes());
+    $("sub").innerHTML = '<span class="sub-long">Aggiornato il ' + esc(when) + '.</span><span class="sub-short">Aggiornato il ' + esc(shortWhen) + "</span>";
     var b = "";
     if (data.avvisi && data.avvisi.length) b += '<div class="banner"><b>Cambi di segnale</b><ul>' + data.avvisi.map(function (a) { return "<li>" + esc(a) + "</li>"; }).join("") + "</ul></div>";
     if (data.problemi && data.problemi.length) b += '<div class="banner warn"><b>Da controllare</b><ul>' + data.problemi.map(function (a) { return "<li>" + esc(a) + "</li>"; }).join("") + "</ul></div>";
@@ -1657,19 +1743,25 @@ var CONFIG_FISSA = {
       .then(poll)
       .then(function () { return loadAll().then(function () { return true; }); })
       .catch(function (e) { status(e.message); return false; })
-      .then(function (ok) { setBusy(false); return ok; });
+      .then(function (ok) {
+        setBusy(false);
+        if (!ok) sfx("errore"); else if (inputs.modalita !== "comando") sfx("fatto");
+        return ok;
+      });
   }
   function runCommand(text, label, errBox) {
     return dispatchAndWait({ modalita: "comando", testo: text }, label).then(function (ok) {
       if (!ok) return false;
       return getFile(loadCfg(), "data/ultimo_comando.json", true).then(function (t) {
-        if (!t) return true;
+        if (!t) { sfx("fatto"); return true; }
         var j = JSON.parse(t);
         if (j.comando === text) {
           status(j.esito);
           if (errBox) $(errBox).textContent = /^⚠️/.test(j.esito) ? j.esito.replace(/^⚠️\s*/, "") : "";
+          sfx(/^⚠️/.test(j.esito) ? "errore" : "fatto");
           return !/^⚠️/.test(j.esito);
         }
+        sfx("fatto");
         return true;
       });
     });
@@ -1876,8 +1968,10 @@ var CONFIG_FISSA = {
       callGemini(key, model, prompt).then(function (text) {
         out.innerHTML = '<div class="answer">' + md(text) + '</div><p class="k">Parere generato da ' + esc(modelName(model)) + " il " +
           new Date().toLocaleString("it-IT", { dateStyle: "short", timeStyle: "short" }) + ". Non costituisce consulenza finanziaria.</p>";
+        sfx("fatto");
       }).catch(function (e) {
         out.innerHTML = '<p class="err">' + esc(e.message) + "</p>";
+        sfx("errore");
       }).then(function () { btn.disabled = false; });
     });
   }
@@ -2001,7 +2095,19 @@ var CONFIG_FISSA = {
     if (!rows) return [];
     return Object.keys(rows).map(function (k) { return rows[k]; }).filter(function (b) { return b.prezzo > 0 && b.prezzo < 1000; });
   }
+  var listWait = 0, listQuiet = false;
+  window.crBtpDownload = function () { listWait = Date.now(); };   // tocco su Scarica dati nella pagina BTP
+  function listDone() {
+    if (!listWait || Date.now() - listWait < 2000) return;
+    var w = btpWin(), busyBtn = false;
+    try { var g = btpFrame.contentDocument.getElementById("btnAvviaTutto"); busyBtn = g && g.disabled; } catch (e) { /* niente */ }
+    if (busyBtn || !btpData()) { if (Date.now() - listWait > 600000) listWait = 0; return; }
+    listWait = 0;
+    if (listQuiet) { listQuiet = false; return; }   // ripristino automatico dopo lo sblocco: in silenzio
+    sfx("fatto");
+  }
   function storeWatch() {
+    listDone();
     if (btpStore.saving || (prot && !secrets)) return;     // a cruscotto bloccato non si fa nulla
     if (btpStore.failAt && Date.now() - btpStore.failAt < 300000) return;   // dopo un errore si riprova tra 5 minuti
     var rows = btpPricedRows();
@@ -2057,6 +2163,7 @@ var CONFIG_FISSA = {
       btpStore.saving = false; btpStore.firstSeenAt = 0;
       if (ok) { btpStore.savedAt = Date.now(); btpStore.savedSig = sig; btpStore.savedCount = rows.length; rememberSaved(); }
       else btpStore.failAt = Date.now();
+      sfx(ok ? "fatto" : "errore");
       storeMsg(msg, kind || (ok ? "ok" : "warn"));
     }
     function poll(waited) {
@@ -2117,6 +2224,9 @@ var CONFIG_FISSA = {
       ".st-line[hidden]{display:none}.st-ico{flex:none;width:14px;text-align:center}.st-wait .st-ico{width:12px;height:12px;border-radius:50%;border:2px solid var(--brand-orange);border-right-color:transparent;animation:stspin 1s linear infinite}" +
       ".st-ok .st-ico{color:#16a34a}.st-warn .st-ico{color:var(--brand-orange)}@keyframes stspin{to{transform:rotate(360deg)}}</style>" +
       "<script>(function(){try{var o=Storage.prototype.setItem;Storage.prototype.setItem=function(k,v){if(k==='gemini_api_key')return;return o.apply(this,arguments);};localStorage.removeItem('gemini_api_key');}catch(e){}})();<\/script>" +
+      "<script>document.addEventListener('click',function(e){var t=e.target;if(!t||!t.closest)return;var p=window.parent;" +
+      "if(t.closest('#btnAvviaTutto,#btnAggiornaDati')&&p.crBtpDownload)p.crBtpDownload();" +
+      "if((t.closest('a.isin-link')||t.closest('button'))&&p.crHaptic)p.crHaptic();},true);<\/script>" +
       "<script>document.addEventListener('DOMContentLoaded',function(){" +
       "document.querySelectorAll('.card-title>span:first-child').forEach(function(e){e.textContent=e.textContent.replace(/^\\s*\\d+\\.\\s*/,'');});" +
       "var t=document.querySelector('#sectionFilterCard .card-title-right'),d=document.getElementById('btnAvviaTutto'),z=document.getElementById('btnResetFiltri');" +
@@ -2160,7 +2270,8 @@ var CONFIG_FISSA = {
   });
   function applyTheme(t) {
     document.documentElement.setAttribute("data-theme", t);
-    $("btn-theme").textContent = t === "dark" ? "Tema chiaro" : "Tema scuro";
+    var lbl = t === "dark" ? "Tema chiaro" : "Tema scuro";
+    $("btn-theme").setAttribute("aria-label", lbl); $("btn-theme").title = lbl;
     syncBtp();
   }
   $("btn-theme").addEventListener("click", function () {
@@ -2378,7 +2489,7 @@ var CONFIG_FISSA = {
     try {
       var c = JSON.parse(sessionStorage.getItem("btp_unified_parsed_cache_v7") || "null");
       var m = /cacheListinoMinuti:\s*(\d+)/.exec(btpSource()), ttl = (m ? Number(m[1]) : 10) * 60000;
-      if (c && c.timestamp && Date.now() - c.timestamp < ttl && c.btpList && c.btpList.length) btpDownloadForPortfolio();
+      if (c && c.timestamp && Date.now() - c.timestamp < ttl && c.btpList && c.btpList.length) { listQuiet = true; btpDownloadForPortfolio(); }
     } catch (e) { /* niente */ }
   }
   function realStart() {
