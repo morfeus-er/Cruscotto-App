@@ -71,6 +71,8 @@ textarea{width:100%;resize:vertical;line-height:1.5}
 .banner.warn{background:var(--sell-bg);border-color:var(--sell-line)}
 .banner.warn b{color:var(--sell)}
 .banner ul{margin:6px 0 0;padding-left:20px}
+.banner[data-bn]{position:relative;padding-right:46px;touch-action:pan-y;transition:transform .2s,opacity .2s;user-select:none;-webkit-user-select:none}
+.banner .bn-x{position:absolute;top:8px;right:8px;width:30px;height:30px;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--text);font-size:14px;line-height:1;cursor:pointer;padding:0}
 .actions.top3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
 .actions.top3 .btn{min-height:48px;font-size:15px;font-weight:500}
 .sort-plain{background:transparent;border:0;color:var(--muted);font-size:14px;min-height:0;padding:2px 0;text-align:right;cursor:pointer;-webkit-appearance:none;appearance:none}
@@ -232,13 +234,13 @@ body.locked{overflow:hidden}
 .coll:not(.open)>:not(.card-title){display:none!important}
 /* logo ER: informazioni e guida */
 header .logo{cursor:pointer;-webkit-tap-highlight-color:transparent}
-#guide{position:fixed;inset:0;z-index:40;background:rgba(11,24,40,.55);display:flex;align-items:center;justify-content:center}
+#guide{position:fixed;inset:0;z-index:40;background:rgba(11,24,40,.55);display:flex;align-items:center;justify-content:center;overscroll-behavior:contain;-webkit-text-size-adjust:100%;text-size-adjust:100%}
 #guide[hidden]{display:none}
-#guide .gd-box{background:var(--surface);color:var(--text);width:100%;height:100%;display:flex;flex-direction:column}
+#guide .gd-box{background:var(--surface);color:var(--text);width:100%;max-width:100vw;height:100%;display:flex;flex-direction:column;min-width:0}
 #guide .gd-head{display:flex;align-items:center;gap:12px;padding:12px 14px calc(12px) 18px;background:var(--navy);color:#fff;border-bottom:3px solid var(--orange)}
 #guide .gd-head b{flex:1;font-size:17px}
 #guide .gd-x{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.25);color:#fff;width:40px;height:40px;border-radius:50%;font-size:18px;cursor:pointer}
-#guide .gd-body{overflow-y:auto;padding:14px 18px calc(28px + env(safe-area-inset-bottom,0px));font-size:15px;line-height:1.55}
+#guide .gd-body{flex:1 1 auto;min-height:0;overflow-x:hidden;overflow-wrap:anywhere;word-break:break-word;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;overflow-y:auto;padding:14px 18px calc(28px + env(safe-area-inset-bottom,0px));font-size:15px;line-height:1.55}
 #guide .gd-firma{color:var(--muted);font-size:13px;margin:0 0 6px}
 #guide h3{color:var(--orange-ink);margin:18px 0 4px}
 #guide .gd-body p{margin:6px 0}#guide .gd-body ul{margin:4px 0;padding-left:20px}
@@ -479,8 +481,8 @@ header .logo{cursor:pointer;-webkit-tap-highlight-color:transparent}
       <p class="k" id="rep-desc" style="margin:0">On: ogni sera messaggio e file del cruscotto, con prezzi e quantità. Anche dal bot: report on, report off.</p>
     </section>
 
-    <section class="card">
-      <div class="card-title">Gemini</div>
+    <section class="card coll" id="sec-gm">
+      <div class="card-title" role="button" tabindex="0" aria-expanded="false">Gemini</div>
       <p class="k" style="margin:0 0 8px">La chiave serve per le analisi in Titoli, Riferimenti, Portafoglio e BTP. Si ottiene gratis su <a id="aistudio-link" href="#" target="_blank" rel="noopener noreferrer">Google AI Studio</a> e resta salvata solo in questo browser.</p>
       <div class="form">
         <label style="flex:1 1 240px">Chiave Gemini<input id="gm-key" type="password" placeholder="AIzaSy…" autocomplete="off"></label>
@@ -491,8 +493,8 @@ header .logo{cursor:pointer;-webkit-tap-highlight-color:transparent}
       <div class="err" id="gm-err"></div>
     </section>
 
-    <section class="card">
-      <div class="card-title">Collegamento a GitHub</div>
+    <section class="card coll" id="sec-gh">
+      <div class="card-title" role="button" tabindex="0" aria-expanded="false">Collegamento a GitHub</div>
       <p class="k" style="margin:0 0 8px">Serve per Aggiorna, Ricalcola ora, Scarica CSV, la gestione degli strumenti e il backtest. Resta salvato solo in questo browser.</p>
       <div class="form">
         <label>Utente GitHub<input id="cfg-owner" placeholder="morfeus-er" size="14" autocomplete="off"></label>
@@ -505,8 +507,8 @@ header .logo{cursor:pointer;-webkit-tap-highlight-color:transparent}
       <div class="err" id="cfg-err"></div>
     </section>
 
-    <section class="card" id="sfx-card">
-      <div class="card-title">Suoni e vibrazione</div>
+    <section class="card coll" id="sfx-card">
+      <div class="card-title" role="button" tabindex="0" aria-expanded="false">Suoni e vibrazione</div>
       <p class="k" style="margin:0 0 10px">Suoni brevi quando finisce un’operazione che richiede tempo (o non riesce) e allo sblocco; vibrazione a ogni tocco di pagine, titoli e pulsanti. Valgono solo su questo dispositivo; il volume segue anche quello dei contenuti multimediali.</p>
       <div class="form" style="align-items:center">
         <label class="chk" style="flex:1 1 140px;flex-direction:row"><input type="checkbox" id="sfx-snd"> Suoni</label>
@@ -515,8 +517,8 @@ header .logo{cursor:pointer;-webkit-tap-highlight-color:transparent}
       </div>
     </section>
 
-    <section class="card" id="sec-card">
-      <div class="card-title">Protezione con impronta e PIN</div>
+    <section class="card coll" id="sec-card">
+      <div class="card-title" role="button" tabindex="0" aria-expanded="false">Protezione con impronta e PIN</div>
       <div id="sec-body"></div>
       <div class="err" id="sec-err"></div>
     </section>
@@ -688,8 +690,9 @@ var DATA_RILASCIO = "2026/11";
     var c = loadCfg();
     if (!c.owner || !c.repo || !c.token) {
       showPage("gestione");
-      status("Per questa funzione serve il collegamento a GitHub: inserisci il token in Gestione, in fondo alla pagina.");
-      $("cfg-token").focus();
+      status("Per questa funzione serve il collegamento a GitHub: inserisci il token in Gestione, sezione Collegamento a GitHub.");
+      setColl($("sec-gh"), true);
+      $("cfg-token").focus(); $("sec-gh").scrollIntoView({ block: "center" });
       return null;
     }
     return c;
@@ -1133,9 +1136,15 @@ var DATA_RILASCIO = "2026/11";
     // sul telefono la data è in forma breve, così resta su una riga accanto al pulsante sole/luna
     var dd = new Date(data.generato), shortWhen = isNaN(dd) ? when : pad2(dd.getDate()) + "/" + pad2(dd.getMonth() + 1) + "/" + dd.getFullYear() + " alle " + pad2(dd.getHours()) + ":" + pad2(dd.getMinutes());
     $("sub").innerHTML = '<span class="sub-long">Aggiornato il ' + esc(when) + '.</span><span class="sub-short">Aggiornato il ' + esc(shortWhen) + "</span>";
-    var b = "";
-    if (data.avvisi && data.avvisi.length) b += '<div class="banner"><b>Cambi di segnale</b><ul>' + data.avvisi.map(function (a) { return "<li>" + esc(a) + "</li>"; }).join("") + "</ul></div>";
-    if (data.problemi && data.problemi.length) b += '<div class="banner warn"><b>Da controllare</b><ul>' + data.problemi.map(function (a) { return "<li>" + esc(a) + "</li>"; }).join("") + "</ul></div>";
+    // riquadri chiudibili con ✕ o scorrendo: restano nascosti fino all'analisi successiva
+    var hid = bannersClosed(data.generato), b = "";
+    function banner(k, cl, title, list) {
+      if (!list || !list.length || hid[k]) return "";
+      return '<div class="banner' + cl + '" data-bn="' + k + '"><button type="button" class="bn-x" data-bn-x="' + k + '" aria-label="Chiudi ' + title + '">✕</button><b>' + title + "</b><ul>" +
+        list.map(function (a) { return "<li>" + esc(a) + "</li>"; }).join("") + "</ul></div>";
+    }
+    b += banner("cambi", "", "Cambi di segnale", data.avvisi);
+    b += banner("controllo", " warn", "Da controllare", data.problemi);
     $("banners").innerHTML = b;
     var owned = ownedTickers();
     var items = sortBy(data.strumenti || [], function (r) { return r.nome; }, function (r) { return r.segnale; });
@@ -1490,9 +1499,8 @@ var DATA_RILASCIO = "2026/11";
 
   // ------------------------------------------------------------ gestione: elenchi di titoli e riferimenti
   function instrumentRow(r, isRef) {
-    var s = r.ultimo_segnale || "";
-    var badge = isRef ? "" : '<span class="sig s ' + cls(s.charAt(0)) + '" style="margin-right:10px">' + esc(minus(s || "nuovo")) + "</span>";
-    return '<div class="mgmt-row"><span style="min-width:0;display:flex;align-items:center">' + badge + "<span><b>" + esc(r.nome) + '</b><span class="codes">' + esc(r.ticker) + (r.isin ? "  " + esc(r.isin) : "") + '</span>' +
+    // niente segnale qui: si vede in Titoli; nome, codici e parole chiave partono dal bordo
+    return '<div class="mgmt-row"><span style="min-width:0;display:flex;align-items:center"><span><b>' + esc(r.nome) + '</b><span class="codes">' + esc(r.ticker) + (r.isin ? "  " + esc(r.isin) : "") + '</span>' +
       (!isRef && r.parole_chiave ? '<span class="k">Parole chiave: ' + esc(r.parole_chiave) + "</span>" : "") + "</span></span>" +
       '<span class="acts">' + (isRef ? "" : '<button type="button" class="btn sm" data-kw="' + esc(r.ticker) + '" data-name="' + esc(r.nome) + '" data-current="' + esc(r.parole_chiave || "") + '">Modifica</button>') +
       '<button type="button" class="btn sm" data-move="' + esc(r.ticker) + '" data-name="' + esc(r.nome) + '">Sposta</button>' +
@@ -2601,8 +2609,55 @@ var DATA_RILASCIO = "2026/11";
     status(fixed("token") ? "Token cancellato dal browser: resta quello scritto nel file." : "Token cancellato da questo browser.");
   });
 
+  // ------------------------------------------------------------ riquadri chiudibili (Cambi di segnale, Da controllare)
+  var BN_KEY = "cruscotto.avvisi_chiusi";
+  function bannersClosed(gen) {
+    try { var j = JSON.parse(store.get(BN_KEY) || "null"); return j && j.gen === String(gen) ? j : {}; } catch (e) { return {}; }
+  }
+  function closeBanner(k, dir) {
+    var el = document.querySelector('#banners [data-bn="' + k + '"]');
+    var j = bannersClosed(current && current.generato);
+    j.gen = String(current && current.generato); j[k] = true;
+    store.set(BN_KEY, JSON.stringify(j));
+    if (!el) return;
+    el.style.transform = "translateX(" + (dir || 1) * 110 + "%)"; el.style.opacity = "0";
+    setTimeout(function () { if (el.parentNode) el.parentNode.removeChild(el); }, 200);
+  }
+  $("banners").addEventListener("click", function (e) {
+    var x = e.target.closest("[data-bn-x]");
+    if (x) closeBanner(x.dataset.bnX, 1);
+  });
+  // scorrimento a destra o a sinistra (telefono); lo scorrimento verticale della pagina resta libero
+  var bnDrag = null;
+  $("banners").addEventListener("pointerdown", function (e) {
+    var el = e.target.closest("[data-bn]");
+    if (!el || e.target.closest("[data-bn-x]") || e.pointerType === "mouse") return;
+    bnDrag = { el: el, x: e.clientX, y: e.clientY, dx: 0, on: false };
+  });
+  $("banners").addEventListener("pointermove", function (e) {
+    if (!bnDrag) return;
+    var dx = e.clientX - bnDrag.x, dy = e.clientY - bnDrag.y;
+    if (!bnDrag.on) {
+      if (Math.abs(dy) > 12 && Math.abs(dy) > Math.abs(dx)) { bnDrag = null; return; }   // scorre la pagina
+      if (Math.abs(dx) < 10) return;
+      bnDrag.on = true; bnDrag.el.style.transition = "none";
+    }
+    bnDrag.dx = dx;
+    bnDrag.el.style.transform = "translateX(" + dx + "px)";
+    bnDrag.el.style.opacity = String(Math.max(0.2, 1 - Math.abs(dx) / 250));
+  });
+  function bnEnd() {
+    if (!bnDrag) return;
+    var d = bnDrag; bnDrag = null;
+    d.el.style.transition = "";
+    if (d.on && Math.abs(d.dx) > 80) { tap(); closeBanner(d.el.dataset.bn, d.dx > 0 ? 1 : -1); }
+    else { d.el.style.transform = ""; d.el.style.opacity = ""; }
+  }
+  $("banners").addEventListener("pointerup", bnEnd);
+  $("banners").addEventListener("pointercancel", bnEnd);
+
   // ------------------------------------------------------------ sezioni che si aprono al tocco
-  // Gestione: Aggiungi, Mio Portafoglio, Titoli con segnali, Riferimenti; Titoli: Backtest personalizzato.
+  // Gestione: tutte le sezioni tranne Cruscotto su Telegram; Titoli: Backtest personalizzato.
   // Chiuse a ogni apertura dell'app; mentre la usi restano come le lasci.
   function setColl(sec, open) {
     if (!sec) return;
@@ -2631,18 +2686,29 @@ var DATA_RILASCIO = "2026/11";
       PESO_NOTIZIE_LUNGO: dec(d.peso_notizie / 2), PESO_TECNICA_LUNGO: dec(1 - d.peso_notizie / 2),
       GIORNI_NOTIZIE: String(d.giorni_notizie), COMMISSIONE: dec(d.commissione * 100) + "%", GIORNI_BACKTEST: String(d.giorni_backtest),
       MODELLI_SERA: (d.modelli_gemini || []).join(" → "), MODELLO_APP: modelName(geminiModel()),
+      SEC_GEMINI: String(d.secondi_gemini || 180), MIN_GEMINI: String(d.minuti_gemini || 15),
       ORIGINE: p ? "valori dell’ultima analisi (" + dmy((current.generato || "").slice(0, 10)) + ")" : "valori predefiniti: l’analisi caricata non li riporta ancora"
     };
   }
   var guidePushed = false;
+  // se la pagina era ingrandita con due dita, la guida si apre comunque a misura di schermo:
+  // per un attimo il cruscotto non permette lo zoom (il browser torna alla misura normale), poi lo riattiva
+  function resetZoom() {
+    var meta = document.querySelector('meta[name="viewport"]');
+    if (!meta || !window.visualViewport || window.visualViewport.scale <= 1.01) return;
+    var orig = meta.getAttribute("content");
+    meta.setAttribute("content", "width=device-width,initial-scale=1,maximum-scale=1");
+    setTimeout(function () { meta.setAttribute("content", orig); }, 400);
+  }
   function openGuide() {
+    resetZoom();
     var v = guideValues();
     $("gd-body").innerHTML = '<p class="gd-firma">' + esc(firma()) + "</p>" + (window.GUIDA_APP || []).map(function (sec) {
       return "<h3>" + esc(sec.titolo) + "</h3>" + md(String(sec.testo || "").replace(/\{([A-Z_]+)\}/g, function (all, k) { return v[k] !== undefined ? v[k] : all; }));
     }).join("");
     $("guide").hidden = false; document.body.style.overflow = "hidden"; $("gd-body").scrollTop = 0;
     try { history.pushState({ guida: 1 }, ""); guidePushed = true; } catch (e) { guidePushed = false; }
-    $("gd-close").focus();
+    $("gd-close").focus({ preventScroll: true });
   }
   function closeGuide(fromBack) {
     if ($("guide").hidden) return;
@@ -2715,6 +2781,7 @@ var DATA_RILASCIO = "2026/11";
     loadAll();
   } else {
     showPage("gestione");
+    setColl($("sec-gh"), true);
     status("Per iniziare collega il cruscotto a GitHub nella pagina Gestione.");
   }
   }
@@ -2777,11 +2844,11 @@ window.GUIDA_APP = [
   { titolo: "Cosa fa il cruscotto",
     testo: "Ogni sera di Borsa aperta, dopo le 18:00, il programma su GitHub analizza i tuoi titoli: combina l'analisi tecnica dei prezzi con le notizie degli ultimi {GIORNI_NOTIZIE} giorni, valutate da Gemini, e ti manda su Telegram il riepilogo e, se attivo, il file del cruscotto. Ogni ora legge i comandi del bot. Non compra né vende nulla: i segnali non sono consulenza finanziaria.\n- **Titoli**: segnali su tre orizzonti, notizie, verifica sul passato, backtest personalizzato e analisi con Gemini.\n- **BTP**: analisi del listino del MOT fatta nel browser; ogni download salva i prezzi nello storico BTP su GitHub.\n- **Riferimenti**: €STR della BCE, indici, cambi e materie prime.\n- **Portafoglio**: le tue posizioni con valore, peso, risultato e cedole dei BTP.\n- **Gestione**: strumenti, posizioni, chiavi, suoni e protezione." },
   { titolo: "I calcoli del segnale",
-    testo: "Numeri usati qui sotto: {ORIGINE}.\n- **Tecnica**: tre voti da −10 a +10, uno per orizzonte. Breve (prossimi giorni): medie a 5 e 10 giorni, MACD veloce, RSI a 5 giorni, variazione a 5 giorni, punto pivot. Medio (prossime settimane): medie a 50 e 200 giorni, MACD, RSI a 14 giorni, variazione a 20 giorni, forza della tendenza (ADX). Lungo (prossimi mesi): media a 200 giorni e sua pendenza, variazioni a 6 e 12 mesi, media a 50 contro quella a 200.\n- **Notizie**: media dei voti di Gemini (da −10 a +10) pesata per rilevanza e freschezza (oggi 1, ieri 0,6, due giorni fa 0,3); più articoli sullo stesso fatto contano una volta sola.\n- **Punteggio**: {PESO_TECNICA} × tecnica + {PESO_NOTIZIE} × notizie; sul lungo termine {PESO_TECNICA_LUNGO} × tecnica + {PESO_NOTIZIE_LUNGO} × notizie.\n- **Segnale**: se il punteggio arriva a ±{SOGLIA} il segnale è + o − con forza da 1 a 10, ridotta quando tecnica e notizie non sono d'accordo. Sotto la soglia è \"=\": più è alto, più il titolo è calmo (mercato laterale, notizie tranquille); vicino alla soglia scende.\n- **Livelli**: supporto, resistenza e soglia di rottura per ogni orizzonte, con le indicazioni compra se scende verso…, vendi se sale verso…." },
+    testo: "Numeri usati qui sotto: {ORIGINE}.\n- **Tecnica**: tre voti da −10 a +10, uno per orizzonte. Breve (prossimi giorni): medie a 5 e 10 giorni, MACD veloce, RSI a 5 giorni, variazione a 5 giorni, punto pivot. Medio (prossime settimane): medie a 50 e 200 giorni, MACD, RSI a 14 giorni, variazione a 20 giorni, forza della tendenza (ADX). Lungo (prossimi mesi): media a 200 giorni e sua pendenza, variazioni a 6 e 12 mesi, media a 50 contro quella a 200.\n- **Notizie**: media dei voti di Gemini (da −10 a +10) pesata per rilevanza e freschezza (oggi 1, ieri 0,6, due giorni fa 0,3); più articoli sullo stesso fatto contano una volta sola.\n- **Punteggio**: {PESO_TECNICA} × tecnica + {PESO_NOTIZIE} × notizie; sul lungo termine {PESO_TECNICA_LUNGO} × tecnica + {PESO_NOTIZIE_LUNGO} × notizie.\n- **Segnale**: se il punteggio arriva a ±{SOGLIA} il segnale è + o − con forza da 1 a 10, ridotta quando tecnica e notizie non sono d'accordo. Sotto la soglia è \"=\": più è alto, più il titolo è calmo (mercato laterale, notizie tranquille); vicino alla soglia scende.\n- **Riquadri Cambi di segnale e Da controllare** (pagina Titoli): si chiudono con ✕ o scorrendoli a destra o a sinistra; restano nascosti su questo dispositivo fino all'analisi successiva.\n- **Livelli**: supporto, resistenza e soglia di rottura per ogni orizzonte, con le indicazioni compra se scende verso…, vendi se sale verso…." },
   { titolo: "Verifica sul passato e backtest",
     testo: "- **Verifica nella scheda di ogni titolo**: ultimi {GIORNI_BACKTEST} giorni; compra quando il punteggio supera +{SOGLIA}, vende quando scende sotto −{SOGLIA}, alla chiusura del giorno dopo, con una commissione dello {COMMISSIONE} per operazione. Per le sere già registrate usa i voti salvati, notizie comprese; per i giorni precedenti solo la tecnica.\n- **Backtest personalizzato** (pagina Titoli): scegli giorni, peso della tecnica e soglia e premi Avvia backtest (circa un minuto su GitHub). **Azzera** toglie i risultati da questo dispositivo finché non ne fai uno nuovo.\n- **Backtest e Gemini**: i risultati del backtest personalizzato vengono inviati a Gemini, nell'Analisi con Gemini della pagina Titoli, **solo se la sezione Backtest personalizzato è aperta**. Chiusa o azzerata, Gemini non li vede." },
   { titolo: "Notizie della sera: modelli Gemini",
-    testo: "Le notizie della sera sono valutate con la chiave salvata nei Secrets di GitHub (`GEMINI_API_KEY`), diversa da quella dell'app.\n- **Ordine dei modelli**: {MODELLI_SERA}. Ogni sera si parte dal primo; si passa al successivo solo se il primo non risponde (limite gratuito raggiunto, sovraccarico, modello non disponibile). Se nessuno risponde, valuta il modello di riserva, più semplice.\n- **Avvisi su Telegram**, in Da controllare: quando qualche notizia è valutata con un modello di qualità più bassa o con la riserva, e quando Google ritira un modello. In quel caso il programma cerca da solo un sostituto gratuito e te lo scrive: il cruscotto continua a funzionare, ma va aggiornato `config.ini`.\n- **Dove si cambia**: repository privato su GitHub → file `config.ini` → matita ✏️ → sezione `[gemini]`, riga `modelli` (nomi separati da virgole, dal migliore al più semplice) → Commit changes. Vale dalla sera dopo.\n- **Quali nomi usare**: i modelli disponibili sono gli stessi per le due chiavi. Apri Gestione → Gemini → menu Modello: i modelli nuovi sono segnati \"nuovo\", quelli ritirati \"non più disponibile\". Accanto a ogni nome c'è il nome tecnico da scrivere in `config.ini` (ad esempio gemini-3.8-flash)." },
+    testo: "Le notizie della sera sono valutate con la chiave salvata nei Secrets di GitHub (`GEMINI_API_KEY`), diversa da quella dell'app.\n- **Ordine dei modelli**: {MODELLI_SERA}. Dalle 18:00 in poi (analisi della sera, anche se lanciata con Ricalcola o con aggiorna dal bot) si parte dal primo, il migliore; prima delle 18:00 il primo passa in fondo, così le sue poche richieste gratuite restano per la sera, ma viene comunque provato prima della riserva. Si passa al modello successivo solo se quello prima non risponde: nessuna risposta entro {SEC_GEMINI} secondi, sovraccarico, limite gratuito raggiunto, modello non disponibile. Un modello che fallisce due volte viene lasciato per il resto dell'analisi. Se la valutazione supera {MIN_GEMINI} minuti, le richieste rimaste vanno ai modelli successivi. Se nessuno risponde, valuta il modello di riserva, più semplice.\n- **Avvisi su Telegram**, in Da controllare: quando qualche notizia è valutata con un modello di qualità più bassa o con la riserva, con il motivo per ogni modello saltato, e quando Google ritira un modello. In quel caso il programma cerca da solo un sostituto gratuito e te lo scrive: il cruscotto continua a funzionare, ma va aggiornato `config.ini`.\n- **Dove si cambia**: repository privato su GitHub → file `config.ini` → matita ✏️ → sezione `[gemini]`, riga `modelli` (nomi separati da virgole, dal migliore al più semplice) → Commit changes. Vale dalla sera dopo.\n- **Quali nomi usare**: i modelli disponibili sono gli stessi per le due chiavi. Apri Gestione → Gemini → menu Modello: i modelli nuovi sono segnati \"nuovo\", quelli ritirati \"non più disponibile\". Accanto a ogni nome c'è il nome tecnico da scrivere in `config.ini` (ad esempio gemini-3.8-flash)." },
   { titolo: "Voti delle notizie: come cambiarne la sensibilità",
     testo: "- **Regole di voto**: repository privato → file `prompt_notizie.txt` → matita ✏️. È il testo che Gemini legge ogni sera: scala da −10 a +10, rilevanza, regole per cronache di Borsa e notizie generiche, istruzione di rigore. Per voti più decisi, ad esempio, togli o ammorbidisci la regola \"in caso di dubbio, voto vicino a 0\". Vale dalla sera dopo; le notizie già salvate non cambiano.\n- **Quanto contano le notizie**: `config.ini` → sezione `[segnali]`: `peso_tecnica` e `peso_notizie` (la somma deve fare 1) e `soglia` (più alta = segnali più prudenti).\n- **Quali notizie arrivano**: parole chiave di ogni titolo (Gestione → Titoli con segnali → Modifica, oppure il comando parole del bot). La prima parola chiave serve anche per cercare su Google News: sceglila precisa (ad esempio leonardo spa e non leonardo), così entrano meno notizie che non c'entrano." },
   { titolo: "Domande di Gemini nell'app",
